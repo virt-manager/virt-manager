@@ -244,7 +244,9 @@ def _label_for_device(dev, disk_bus_index):
     if devtype == "tpm":
         if dev.device_path:
             return _("TPM %(device)s") % {"device": dev.device_path}
-        return _("TPM v%(version)s") % {"version": dev.version}
+        if dev.version:
+            return _("TPM v%(version)s") % {"version": dev.version}
+        return _("TPM")
 
     devmap = {
         "panic": _("Panic Notifier"),
@@ -368,7 +370,10 @@ class vmmDetails(vmmGObjectUI):
         self._addstorage.connect("changed", _e(EDIT_DISK))
 
         self._xmleditor = vmmXMLEditor(
-            self.builder, self.topwin, self.widget("hw-panel-align"), self.widget("hw-panel")
+            self.builder,
+            self.topwin,
+            self.widget("hw-panel-align"),
+            self.widget("hw-panel-scroll"),
         )
         self._xmleditor.connect("changed", _e(EDIT_XML))
         self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
@@ -2158,7 +2163,7 @@ class vmmDetails(vmmGObjectUI):
             self._disable_device_remove(_("Hypervisor does not support removing this device"))
         if controller.type == "pci":
             self._disable_device_remove(_("Hypervisor does not support removing this device"))
-        elif controller.type in ["scsi", "sata", "ide", "fdc"]:
+        elif controller.type in ["nvme", "scsi", "sata", "ide", "fdc"]:
             model = self.widget("controller-device-list").get_model()
             model.clear()
             disks = controller.get_attached_devices(self.vm.xmlobj)
@@ -2184,6 +2189,12 @@ class vmmDetails(vmmGObjectUI):
 
         type_label = vmmAddHardware.controller_pretty_desc(controller)
         self.widget("controller-type").set_text(type_label)
+
+        has_serial = controller.type == "nvme" and controller.serial
+        if has_serial:
+            self.widget("controller-serial").set_text(controller.serial)
+        uiutil.set_grid_row_visible(self.widget("controller-serial"), has_serial)
+        uiutil.set_grid_row_visible(self.widget("controller-serial-label"), has_serial)
 
         combo = self.widget("controller-model")
         vmmAddHardware.populate_controller_model_combo(combo, controller.type)
@@ -2271,10 +2282,22 @@ class vmmDetails(vmmGObjectUI):
     def _make_boot_rows(self):
         if not self.vm.can_use_device_boot_order():
             return [
-                ["hd", _("Hard Disk"), "drive-harddisk", False, True],
-                ["cdrom", _("CDROM"), "media-optical", False, True],
-                ["network", _("Network (PXE)"), "network-idle", False, True],
-                ["fd", _("Floppy"), "media-floppy", False, True],
+                [
+                    virtinst.DomainOs.BOOT_DEVICE_HARDDISK,
+                    _("Hard Disk"),
+                    "drive-harddisk",
+                    False,
+                    True,
+                ],
+                [virtinst.DomainOs.BOOT_DEVICE_CDROM, _("CDROM"), "media-optical", False, True],
+                [
+                    virtinst.DomainOs.BOOT_DEVICE_NETWORK,
+                    _("Network (PXE)"),
+                    "network-idle",
+                    False,
+                    True,
+                ],
+                [virtinst.DomainOs.BOOT_DEVICE_FLOPPY, _("Floppy"), "media-floppy", False, True],
             ]
 
         ret = []

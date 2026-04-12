@@ -29,18 +29,18 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-06-20 12:01+0000\n"
+"PO-Revision-Date: 2025-08-30 16:33+0000\n"
 "Last-Translator: \"Sergey A.\" <Ser82-png@yandex.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ru/>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Weblate 5.12.1\n"
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || ("
+"n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Weblate 5.13\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -105,10 +105,8 @@ msgid "Manage virtual machines"
 msgstr "Управление виртуальными машинами"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualization;libvirt;vm;vmm;виртуализация;"
+msgstr "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;виртуализация;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -174,10 +172,8 @@ msgid "Host _Device:"
 msgstr "Устройство основной системы:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Запустить пул"
+msgstr "Политика запуска:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -4944,6 +4940,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator не установлен или не может быть использован, в Wayland значок "
+"на панели задач не будет недоступен"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -6003,10 +6001,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "Для защиты при запуске с помощью SEV-SNP требуется машина UEFI Q35"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "Для защиты при запуске с помощью SEV требуется машина UEFI Q35"
+msgstr "Для защиты при запуске с помощью TDX требуется машина UEFI Q35"
 
 #: virtinst/domcapabilities.py:217
 #, python-format

@@ -6,7 +6,6 @@
   <vcpu placement="static">2</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <boot dev="cdrom"/>
   </os>
   <clock offset="utc"/>
   <on_poweroff>destroy</on_poweroff>
@@ -18,6 +17,7 @@
       <readonly/>
       <address type="drive" controller="0" bus="1" target="0" unit="0"/>
       <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-win7.iso"/>
+      <boot order="1"/>
     </disk>
     <controller type="ide" index="0"/>
     <disk type="file" device="cdrom">

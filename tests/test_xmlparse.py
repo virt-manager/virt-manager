@@ -3,6 +3,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import unittest
+
 import pytest
 
 import virtinst
@@ -652,7 +654,8 @@ def testGuestBootorder():
     guest, outfile = _get_test_content(kvmconn, "bootorder")
 
     assert guest.get_boot_order() == ["./devices/disk[1]"]
-    assert guest.get_boot_order(legacy=True) == ["hd"]
+    with unittest.mock.patch("virtinst.Guest.can_use_device_boot_order", return_value=False):
+        assert guest.get_boot_order() == ["hd"]
 
     legacy_order = ["hd", "fd", "cdrom", "network"]
     dev_order = [
@@ -661,13 +664,15 @@ def testGuestBootorder():
         "./devices/disk[2]",
         "./devices/interface[1]",
     ]
-    guest.set_boot_order(legacy_order, legacy=True)
+    with unittest.mock.patch("virtinst.Guest.can_use_device_boot_order", return_value=False):
+        guest.set_boot_order(legacy_order)
+        assert guest.get_boot_order() == legacy_order
     assert guest.get_boot_order() == dev_order
-    assert guest.get_boot_order(legacy=True) == legacy_order
 
     guest.set_boot_order(dev_order)
     assert guest.get_boot_order() == dev_order
-    assert guest.get_boot_order(legacy=True) == []
+    with unittest.mock.patch("virtinst.Guest.can_use_device_boot_order", return_value=False):
+        assert guest.get_boot_order() == []
 
     _alter_compare(kvmconn, guest.get_xml(), outfile)
 

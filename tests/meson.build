@@ -7,9 +7,9 @@ lint_files = [
 spell_files = lint_files + [
   '*.md',
   'man/*.rst',
-  'data/virt-manager.appdata.xml.in',
-  'data/virt-manager.desktop.in',
   'data/org.virt-manager.virt-manager.gschema.xml',
+  'data/org.virt_manager.virt-manager.metainfo.xml.in',
+  'data/virt-manager.desktop.in',
   'virt-manager.spec.in',
 ]
 

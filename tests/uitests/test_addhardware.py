@@ -63,6 +63,11 @@ def _open_app(app, vmname, title=None, shutdown=False, **kwargs):
     return details
 
 
+def _nvme_controller_supported():
+    # pylint: disable=protected-access
+    return tests.utils.URIs.open_testdriver_cached().support._check_version("11.5.0")
+
+
 ##############
 # Test cases #
 ##############
@@ -73,9 +78,16 @@ def testAddControllers(app):
     Add various controller configs
     """
     details = _open_app(app, "test-clone-simple")
-    addhw = _open_addhw(app, details)
+
+    if _nvme_controller_supported():
+        # NVMe controller
+        addhw = _open_addhw(app, details)
+        tab = _select_hw(addhw, "Controller", "controller-tab")
+        tab.combo_select("Type:", "NVMe")
+        _finish(addhw, check=details)
 
     # Default SCSI
+    addhw = _open_addhw(app, details)
     tab = _select_hw(addhw, "Controller", "controller-tab")
     tab.combo_select("Type:", "SCSI")
     _finish(addhw, check=details)
@@ -104,14 +116,18 @@ def testAddControllers(app):
     lib.utils.check(lambda: not finish.sensitive)
 
 
-def testAddCephDisk(app):
-    """
-    Add a disk with a ceph volume, ensure it maps correctly
-    """
+def testAddDisks1(app):
     details = _open_app(app, "test-clone-simple")
-    addhw = _open_addhw(app, details)
 
-    # Select ceph volume for disk
+    # NVME disk
+    if _nvme_controller_supported():
+        addhw = _open_addhw(app, details)
+        tab = _select_hw(addhw, "Storage", "storage-tab")
+        tab.combo_select("Bus type:", "NVMe")
+        _finish(addhw, check=details)
+
+    # Add a disk with a ceph volume, ensure it maps correctly
+    addhw = _open_addhw(app, details)
     tab = _select_hw(addhw, "Storage", "storage-tab")
     tab.find_fuzzy("Select or create", "radio").click()
     tab.find("storage-browse", "push button").click()
@@ -129,7 +145,7 @@ def testAddCephDisk(app):
     lib.utils.check(lambda: "rbd-sourcename/some-rbd-vol" in disk_path.text)
 
 
-def testAddDisks(app):
+def testAddDisks2(app):
     """
     Add various disk configs and test storage browser
     """
@@ -259,7 +275,7 @@ def testAddDiskSearchPermsCheckbox(app, uri, tmpdir):
     path = tmpdir + "/foo2.img"
     tab.find("storage-entry").set_text(path)
     _finish(addhw, check=None)
-    alert = app.root.find_fuzzy("vmm dialog", "alert")
+    alert = app.root.find_fuzzy(None, "alert")
     alert.find_fuzzy("Don't ask", "check box").click()
     app.click_alert_button("emulator may not have", "No")
     lib.utils.check(lambda: details.active)
@@ -316,7 +332,7 @@ def testAddDiskSearchPermsFail(app, uri, tmpdir):
     tab.find("storage-entry").set_text(path)
     _finish(addhw, check=None)
     app.click_alert_button("emulator may not have", "Yes")
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find_fuzzy("Errors were encountered", "label")
     alert.find_fuzzy("Don't ask", "check box").click()
     alert.find_fuzzy("OK", "push button").click()
@@ -451,6 +467,7 @@ def testAddHosts(app):
     _open_addhw(app, details)
     tab = _select_hw(addhw, "USB Host Device", "host-tab")
     tab.find_fuzzy("Cruzer Micro 256", "table cell").click()
+    tab.combo_select("Startup Policy:", "optional")
     _finish(addhw, check=details)
 
     # Add PCI device
@@ -695,7 +712,7 @@ def testAddHWCornerCases(app):
     # Test live adding, error dialog, click no
     _open_addhw(app, details)
     _finish(addhw, check=None)
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find("This device could not be attached to the running machine", "label")
     alert.find("Details", "toggle button").click_expander()
     alert.find("No", "push button").click()
@@ -704,7 +721,7 @@ def testAddHWCornerCases(app):
     # Test live adding, error dialog, click yes
     _open_addhw(app, details)
     _finish(addhw, check=None)
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find("This device could not be attached to the running machine", "label")
     alert.find("Details", "toggle button").click_expander()
     alert.find("Yes", "push button").click()

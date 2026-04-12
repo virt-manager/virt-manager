@@ -102,7 +102,6 @@ chpasswd:
   </sysinfo>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
-    <boot dev="hd"/>
     <smbios mode="sysinfo"/>
   </os>
   <features>
@@ -125,6 +124,7 @@ chpasswd:
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>

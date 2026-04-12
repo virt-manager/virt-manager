@@ -439,7 +439,7 @@ def build_installer(options, guest, installdata):
         if options.livecd:
             no_install = True
     elif options.pxe:
-        install_bootdev = "network"
+        install_bootdev = virtinst.DomainOs.BOOT_DEVICE_NETWORK
     elif installdata.is_set:
         pass
     elif options.xmlonly:

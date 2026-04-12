@@ -191,6 +191,8 @@ def testCloneStorageChange(app):
 
 
 def testCloneError(app):
+    app.open(extra_opts=["--test-options=disable-name-validation"])
+
     # Trigger some error handling scenarios
     win = app.manager_open_clone("test-clone-full")
     win.find("Clone", "push button").click()

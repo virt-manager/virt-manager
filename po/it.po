@@ -15,22 +15,22 @@
 # Frediano Ziglio <fziglio@redhat.com>, 2022.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2022.
 # Elena Mishina <lepata@basealt.ru>, 2024.
-# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-06-19 07:48+0000\n"
-"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"PO-Revision-Date: 2025-10-09 05:53+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.1\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -92,10 +92,8 @@ msgid "Manage virtual machines"
 msgstr "Gestisci macchine virtuali"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualizzazione;libvirt;vm;vmm;"
+msgstr "virtualizzazione;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -159,10 +157,8 @@ msgid "Host _Device:"
 msgstr "_Dispositivo host:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Avvia pool"
+msgstr "Politica di avvio:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -4954,6 +4950,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator non installato o utilizzabile, icona della barra delle "
+"applicazioni non disponibile su Wayland"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -6016,10 +6014,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "La sicurezza di avvio SEV-SNP richiede una macchina UEFI Q35"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "La sicurezza di avvio SEV richiede una macchina UEFI Q35"
+msgstr "La sicurezza di avvio TDX richiede una macchina UEFI Q35"
 
 #: virtinst/domcapabilities.py:217
 #, python-format

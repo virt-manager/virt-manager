@@ -39,16 +39,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-06-28 12:03+0000\n"
-"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
-"Language-Team: Spanish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/es/>\n"
+"PO-Revision-Date: 2025-11-13 23:58+0000\n"
+"Last-Translator: Nicolás Gal <nialegal@yandex.com>\n"
+"Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -110,10 +110,8 @@ msgid "Manage virtual machines"
 msgstr "Gestione máquinas virtuales"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualización;libvirt;mv;vm;vmm;"
+msgstr "virtualización;libvirt;mv;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -175,10 +173,8 @@ msgid "Host _Device:"
 msgstr "_Dispositivo anfitrión:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Iniciar silo"
+msgstr "Directiva de arranque:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -1401,7 +1397,7 @@ msgstr ""
 
 #: ui/host.ui:27 ui/manager.ui:26 ui/vmwindow.ui:25
 msgid "_File"
-msgstr "Archivo"
+msgstr "_Archivo"
 
 #: ui/host.ui:36 ui/vmwindow.ui:34
 msgid "_View Manager"
@@ -1802,7 +1798,7 @@ msgstr "Preferencias"
 
 #: ui/preferences.ui:45
 msgid "Enable _system tray icon"
-msgstr "Activar icono en el área de notificación"
+msgstr "Activar icono en el área de _notificación"
 
 #: ui/preferences.ui:67
 msgid "Enable libgues_tfs VM introspection"
@@ -1810,7 +1806,7 @@ msgstr "Activar introspección de MV con libgues_tfs"
 
 #: ui/preferences.ui:124
 msgid "Enable _XML editing"
-msgstr "Activar edición del _XML"
+msgstr "Activar edición de _XML"
 
 #: ui/preferences.ui:178
 msgid "<b>General</b>"
@@ -1826,7 +1822,7 @@ msgstr "Sondeo de E/S de _disco"
 
 #: ui/preferences.ui:250
 msgid "Poll _Network I/O"
-msgstr "Sondeo de E/S de red"
+msgstr "Sondeo de E/S de _red"
 
 #: ui/preferences.ui:278
 msgid "Poll _Memory stats"
@@ -1863,7 +1859,7 @@ msgstr ""
 
 #: ui/preferences.ui:458
 msgid "_Storage format:"
-msgstr "Formato de almacenamiento:"
+msgstr "Formato de _almacenamiento:"
 
 #: ui/preferences.ui:494
 msgid ""
@@ -1894,7 +1890,7 @@ msgstr "_Firmware x86:"
 
 #: ui/preferences.ui:550
 msgid "<b>New VM Defaults</b>"
-msgstr "<b>Nuevas configuraciones predeterminadas para la MV</b>"
+msgstr "<b>Configuración predeterminada para nuevas MVs</b>"
 
 #: ui/preferences.ui:575
 msgid "N_ew VM"
@@ -1906,7 +1902,7 @@ msgstr "E_scalado de consola gráfica:"
 
 #: ui/preferences.ui:621
 msgid "Gr_ab keys:"
-msgstr "C_apturar teclas:"
+msgstr "C_apturar teclado:"
 
 #: ui/preferences.ui:636
 msgid "Not supported"
@@ -1959,7 +1955,7 @@ msgstr "_Forzar apagado:"
 
 #: ui/preferences.ui:836
 msgid "Poweroff/_Reboot/Save:"
-msgstr "Apagar/_Reiniciar/Guardar:"
+msgstr "_Apagar/Reiniciar/Guardar:"
 
 #: ui/preferences.ui:850
 msgid "_Pause:"
@@ -1967,15 +1963,15 @@ msgstr "_Pausar:"
 
 #: ui/preferences.ui:903
 msgid "Device re_moval:"
-msgstr "Eli_minar dispositivo:"
+msgstr "_Quitar dispositivo:"
 
 #: ui/preferences.ui:917
 msgid "_Unapplied changes:"
-msgstr "Cambios no aplicados:"
+msgstr "_Cambios no aplicados:"
 
 #: ui/preferences.ui:944
 msgid "_Deleting storage:"
-msgstr "Borran_do almacenamiento:"
+msgstr "_Eliminar almacenamiento:"
 
 #: ui/preferences.ui:973
 msgid "<b>Confirmations</b>"
@@ -1983,7 +1979,7 @@ msgstr "<b>Confirmaciones</b>"
 
 #: ui/preferences.ui:991
 msgid "Feed_back"
-msgstr "Comentarios"
+msgstr "Ad_vertencias"
 
 #: ui/snapshots.ui:80
 msgid "Description:"
@@ -2150,7 +2146,7 @@ msgstr "Barra de herramientas"
 
 #: ui/vmwindow.ui:276
 msgid "Send _Key"
-msgstr "Enviar tecla"
+msgstr "Enviar _tecla"
 
 #: ui/vmwindow.ui:299
 msgid "Show the graphical console"
@@ -4495,7 +4491,7 @@ msgstr "Ejecutándose"
 
 #: virtManager/lib/libvirtenummap.py:68
 msgid "Paused"
-msgstr "Pausado"
+msgstr "Pausada"
 
 #: virtManager/lib/libvirtenummap.py:70
 msgid "Shutting Down"
@@ -4503,32 +4499,32 @@ msgstr "Apagando"
 
 #: virtManager/lib/libvirtenummap.py:73 virtManager/lib/libvirtenummap.py:121
 msgid "Saved"
-msgstr "Guardado"
+msgstr "Guardada"
 
 #: virtManager/lib/libvirtenummap.py:75
 msgid "Shutoff"
-msgstr "Apagado"
+msgstr "Apagada"
 
 #: virtManager/lib/libvirtenummap.py:77 virtManager/lib/libvirtenummap.py:99
 #: virtManager/lib/libvirtenummap.py:111 virtManager/lib/libvirtenummap.py:119
 msgid "Crashed"
-msgstr "Colgado"
+msgstr "Colgada"
 
 #: virtManager/lib/libvirtenummap.py:79
 msgid "Suspended"
-msgstr "Suspendido"
+msgstr "Suspendida"
 
 #: virtManager/lib/libvirtenummap.py:91
 msgid "Booted"
-msgstr "Arrancado"
+msgstr "Arrancada"
 
 #: virtManager/lib/libvirtenummap.py:92 virtManager/lib/libvirtenummap.py:120
 msgid "Migrated"
-msgstr "Migrado"
+msgstr "Migrada"
 
 #: virtManager/lib/libvirtenummap.py:93
 msgid "Restored"
-msgstr "Restaurado"
+msgstr "Restaurada"
 
 #: virtManager/lib/libvirtenummap.py:94 virtManager/lib/libvirtenummap.py:108
 #: virtManager/lib/libvirtenummap.py:123
@@ -4537,7 +4533,7 @@ msgstr "Desde instantánea"
 
 #: virtManager/lib/libvirtenummap.py:95
 msgid "Unpaused"
-msgstr "No pausado"
+msgstr "No pausada"
 
 #: virtManager/lib/libvirtenummap.py:96
 msgid "Migration canceled"
@@ -4581,11 +4577,11 @@ msgstr "Apagar"
 
 #: virtManager/lib/libvirtenummap.py:118
 msgid "Destroyed"
-msgstr "Destruido"
+msgstr "Destruida"
 
 #: virtManager/lib/libvirtenummap.py:122
 msgid "Failed"
-msgstr "Fallido"
+msgstr "Fallida"
 
 #: virtManager/lib/libvirtenummap.py:126
 msgid "Panicked"
@@ -4961,6 +4957,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator no está instalado o no se puede utilizar; el icono en la "
+"bandeja del sistema no está disponible en Wayland"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -6025,10 +6023,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "El inicio seguro con SEV-SNP requiere una máquina con UEFI Q35"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "El inicio seguro con SEV requiere una máquina con UEFI Q35"
+msgstr "El inicio seguro con TDX requiere una máquina con UEFI Q35"
 
 #: virtinst/domcapabilities.py:217
 #, python-format

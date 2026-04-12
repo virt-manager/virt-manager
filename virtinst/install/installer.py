@@ -87,7 +87,7 @@ class Installer:
         if cdrom:
             cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
             self._cdrom = cdrom
-            self._install_bootdev = "cdrom"
+            self._install_bootdev = DomainOs.BOOT_DEVICE_CDROM
         elif location or location_kernel or location_initrd or install_kernel or install_initrd:
             self._treemedia = InstallerTreeMedia(
                 self.conn,
@@ -226,18 +226,17 @@ class Installer:
         # windows virtio installs, and booting local disk from PXE)
         for disk in guest.devices.disk:
             if disk.device == disk.DEVICE_DISK:
-                bootdev = "hd"
+                bootdev = DomainOs.BOOT_DEVICE_HARDDISK
                 if bootdev not in bootorder:
                     bootorder.append(bootdev)
                 break
+
+        if guest.can_use_device_boot_order():
+            return guest.convert_old_boot_order(bootorder)
         return bootorder
 
     def _can_set_guest_bootorder(self, guest):
-        return (
-            not guest.os.is_container()
-            and not guest.os.kernel
-            and not any([d.boot.order for d in guest.devices.get_all()])
-        )
+        return not guest.os.is_container() and not guest.os.kernel
 
     def _alter_treemedia_bootconfig(self, guest):
         if not self._treemedia:
@@ -262,10 +261,11 @@ class Installer:
         self._alter_treemedia_bootconfig(guest)
 
         bootdev = self._install_bootdev
+        bootorder = []
         if bootdev and self._can_set_guest_bootorder(guest):
-            guest.os.bootorder = self._build_boot_order(guest, bootdev)
-        else:
-            guest.os.bootorder = []
+            bootorder = self._build_boot_order(guest, bootdev)
+
+        guest.set_boot_order(bootorder)
 
     def _alter_install_resources(self, guest, meter):
         """
@@ -483,9 +483,9 @@ class Installer:
 
         self._add_install_cdrom_device(guest)
 
-        if not guest.os.bootorder and self._can_set_guest_bootorder(guest):
+        if not guest.has_boot_order() and self._can_set_guest_bootorder(guest):
             bootdev = self._get_postinstall_bootdev(guest)
-            guest.os.bootorder = self._build_boot_order(guest, bootdev)
+            guest.set_boot_order(self._build_boot_order(guest, bootdev))
 
         if not self._is_reinstall:
             guest.set_defaults(None)

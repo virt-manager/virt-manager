@@ -29,6 +29,7 @@ from .devices import (
     DeviceHostdev,
     DeviceInterface,
 )
+from .domain import DomainOs
 from .guest import Guest
 from .logger import log, reset_logging
 from .nodedev import NodeDevice
@@ -3208,16 +3209,20 @@ class ParserBoot(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def set_firmware_feature_cb(self, inst, val, virtarg):
+        feature_name = virtarg.cliname.split(".", 1)[1]
+        inst.set_firmware_feature(feature_name, val)
+
     @classmethod
     def _virtcli_class_init(cls):
         VirtCLIParser._virtcli_class_init_common(cls)
 
         # This is simply so the boot options are advertised with --boot help,
         # actual processing is handled by _parse
-        cls.add_arg("hd", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("cdrom", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("fd", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("network", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_HARDDISK, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_CDROM, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_FLOPPY, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_NETWORK, None, lookup_cb=None, cb=cls.noset_cb)
 
         cls.add_arg(
             "refresh-machine-type",
@@ -3236,6 +3241,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("domain_type", None, lookup_cb=None, cb=cls.set_domain_type_cb)
         cls.add_arg("emulator", None, lookup_cb=None, cb=cls.set_emulator_cb)
         cls.add_arg("uefi", None, lookup_cb=None, cb=cls.set_uefi_cb)
+        cls.add_arg("secure-boot", "secure_boot", is_onoff=True)
 
         # Common/Shared boot options
         cls.add_arg("loader", "loader")
@@ -3253,6 +3259,20 @@ class ParserBoot(VirtCLIParser):
             is_onoff=True,
         )
         cls.add_arg("firmware.feature[0-9]*.name", "name", find_inst_cb=cls.feature_find_inst_cb)
+        cls.add_arg(
+            "firmware.secure-boot",
+            None,
+            lookup_cb=None,
+            cb=cls.set_firmware_feature_cb,
+            is_onoff=True,
+        )
+        cls.add_arg(
+            "firmware.enrolled-keys",
+            None,
+            lookup_cb=None,
+            cb=cls.set_firmware_feature_cb,
+            is_onoff=True,
+        )
         cls.add_arg("nvram", "nvram")
         cls.add_arg("nvram.template", "nvram_template")
         cls.add_arg("boot[0-9]*.dev", "dev", find_inst_cb=cls.boot_find_inst_cb)
@@ -4272,6 +4292,8 @@ class ParserNetwork(VirtCLIParser):
         # Standard XML options
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("backend.type", "backend.type")
+        cls.add_arg("backend.hostname", "backend.hostname")
+        cls.add_arg("backend.fqdn", "backend.fqdn")
         cls.add_arg("backend.logFile", "backend.logFile")
         cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters", is_onoff=True)
 
@@ -4490,6 +4512,9 @@ class ParserController(VirtCLIParser):
         cls.add_arg("target.index", "target_index")
         cls.add_arg("target.node", "target_node")
         cls.add_arg("target.memReserve", "target_memReserve")
+        cls.add_arg("pcihole64", "pcihole64")
+        cls.add_arg("pcihole64.unit", "pcihole64_unit")
+        cls.add_arg("serial", "serial")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
         cls.add_arg("num_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
@@ -5281,7 +5306,9 @@ class ParserHostdev(VirtCLIParser):
         cls.add_arg("type", "type")
         cls.add_arg("name", None, cb=cls.set_name_cb, lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver.name", "driver_name")
+        cls.add_arg("driver.iommufd", "driver_iommufd")
         cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
+        cls.add_arg("acpi.nodeset", "acpi_nodeset", can_comma=True)
         cls.add_arg("source.startupPolicy", "startup_policy")
 
 

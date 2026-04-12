@@ -2,6 +2,7 @@
 # See the COPYING file in the top-level directory.
 
 import os
+import pathlib
 
 import pytest
 
@@ -52,7 +53,7 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_ignore_collect(path, config):
+def _impl_pytest_ignore_collect(collection_path, config):
     uitests_requested = config.getoption("--uitests")
 
     # Default --uitests to --verbosity=2
@@ -60,23 +61,40 @@ def pytest_ignore_collect(path, config):
         config.option.verbose = max(2, config.option.verbose)
 
     # Unless explicitly requested, ignore these tests
-    if "test_dist.py" in str(path):
-        return True
-    if "test_urls.py" in str(path):
-        return True
-    if "test_inject.py" in str(path):
+    if collection_path.name in (
+        "test_dist.py",
+        "test_urls.py",
+        "test_inject.py",
+    ):
         return True
 
-    uitest_file = "tests/uitests" in str(path)
+    uitest_file = "tests/uitests" in str(collection_path)
     if uitest_file and not uitests_requested:
         return True
     if not uitest_file and uitests_requested:
         return True
 
 
+if getattr(pytest, "version_tuple", (0,)) >= (7,):
+
+    def pytest_ignore_collect(collection_path, config):
+        return _impl_pytest_ignore_collect(collection_path, config)
+
+else:
+
+    def pytest_ignore_collect(path, config):
+        return _impl_pytest_ignore_collect(pathlib.Path(path), config)
+
+
 def pytest_collection_modifyitems(config, items):
+    def item_path_basename(item):
+        try:
+            return item.path.name
+        except AttributeError:
+            return os.path.basename(item.fspath)
+
     def find_items(basename):
-        return [i for i in items if os.path.basename(i.fspath) == basename]
+        return [i for i in items if item_path_basename(i) == basename]
 
     # Move test_cli cases to the end, because they are slow
     # Move test_checkprops to the very end, because it needs to run

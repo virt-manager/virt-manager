@@ -6,8 +6,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <boot dev="cdrom"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <pae/>
@@ -22,11 +20,13 @@
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="hda" bus="ide"/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="cdrom">
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>
+      <boot order="1"/>
     </disk>
     <disk type="file" device="cdrom">
       <source file="/pool-dir/testvol2.img"/>
@@ -59,7 +59,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <pae/>
@@ -74,6 +73,7 @@
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="hda" bus="ide"/>
+      <boot order="1"/>
     </disk>
     <disk type="file" device="cdrom">
       <target dev="hdb" bus="ide"/>

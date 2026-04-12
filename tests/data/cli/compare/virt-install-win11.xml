@@ -11,8 +11,6 @@
   <vcpu>4</vcpu>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
-    <boot dev="cdrom"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -50,12 +48,14 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/win11.qcow2"/>
       <target dev="sda" bus="sata"/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdb" bus="sata"/>
       <readonly/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>
@@ -111,7 +111,6 @@
   <vcpu>4</vcpu>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -149,6 +148,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/win11.qcow2"/>
       <target dev="sda" bus="sata"/>
+      <boot order="1"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>

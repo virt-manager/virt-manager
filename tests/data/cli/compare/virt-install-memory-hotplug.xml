@@ -10,8 +10,6 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <boot dev="network"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -38,6 +36,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="2"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>
@@ -59,6 +58,7 @@
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
+      <boot order="1"/>
     </interface>
     <console type="pty"/>
     <channel type="unix">
@@ -155,7 +155,6 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -182,6 +181,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>

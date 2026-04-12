@@ -76,7 +76,6 @@ ssh_authorized_keys:
   <vcpu>2</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <boot dev="hd"/>
     <smbios mode="none"/>
   </os>
   <features>
@@ -92,6 +91,7 @@ ssh_authorized_keys:
     <disk type="file" device="disk">
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">

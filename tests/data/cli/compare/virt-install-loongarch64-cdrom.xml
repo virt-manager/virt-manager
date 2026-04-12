@@ -11,8 +11,6 @@
   <vcpu>2</vcpu>
   <os firmware="efi">
     <type arch="loongarch64" machine="virt">hvm</type>
-    <boot dev="cdrom"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -24,12 +22,14 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora29.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
       <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-f26-netinst.iso"/>
       <target dev="sda" bus="scsi"/>
       <readonly/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="scsi" model="virtio-scsi"/>
@@ -90,7 +90,6 @@
   <vcpu>2</vcpu>
   <os firmware="efi">
     <type arch="loongarch64" machine="virt">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -102,6 +101,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora29.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <disk type="file" device="cdrom">
       <target dev="sda" bus="scsi"/>

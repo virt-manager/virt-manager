@@ -914,6 +914,19 @@ class DeviceDisk(Device):
         if path:
             self._set_xmlpath(path)
 
+    def get_nvme_namespace(self, guest):
+        """
+        Returns the NVMe namespace for disk based on it's bus and serial.
+
+        If no NVMe controller is defined return 0 as that is default used by
+        libvirt and virt-manager.
+        """
+        for c in guest.devices.controller:
+            if c.type == "nvme" and c.serial == self.serial:
+                return c.index
+
+        return 0
+
     def get_target_prefix(self):
         """
         Returns the suggested disk target prefix (hd, xvd, sd ...) for the
@@ -930,6 +943,7 @@ class DeviceDisk(Device):
                 "fd": 2,
                 "hd": 4,
                 "sd": 1024,
+                "nvme": 1024,
             }
             return prefix, nummap[prefix]
 
@@ -941,10 +955,12 @@ class DeviceDisk(Device):
             return _return("fd")
         elif self.bus == "ide":
             return _return("hd")
+        elif self.bus == "nvme":
+            return _return("nvme")
         # sata, scsi, usb, sd
         return _return("sd")
 
-    def generate_target(self, skip_targets):
+    def generate_target(self, skip_targets, guest):
         """
         Generate target device ('hda', 'sdb', etc..) for disk, excluding
         any targets in 'skip_targets'.
@@ -957,11 +973,17 @@ class DeviceDisk(Device):
         skip_targets = [t for t in skip_targets if t and t.startswith(prefix)]
         skip_targets.sort()
 
+        if self.bus == "nvme":
+            nvmen = self.get_nvme_namespace(guest)
+
         def get_target():
             first_found = None
 
             for i in range(maxnode):
-                gen_t = prefix + self.num_to_target(i + 1)
+                if self.bus == "nvme":
+                    gen_t = f"{prefix}{nvmen}n{i + 1}"
+                else:
+                    gen_t = prefix + self.num_to_target(i + 1)
                 if gen_t in skip_targets:
                     skip_targets.remove(gen_t)
                     continue
@@ -1008,7 +1030,7 @@ class DeviceDisk(Device):
             used.remove(self.target)
 
         self.target = None
-        self.generate_target(used)
+        self.generate_target(used, guest)
 
     #########################
     # set_defaults handling #
@@ -1078,4 +1100,4 @@ class DeviceDisk(Device):
 
         if not self.target:
             used_targets = [d.target for d in guest.devices.disk if d.target]
-            self.generate_target(used_targets)
+            self.generate_target(used_targets, guest)

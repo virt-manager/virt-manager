@@ -86,7 +86,6 @@
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
     <cmdline>foo bar baz</cmdline>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -109,6 +108,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>

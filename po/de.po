@@ -38,16 +38,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-07-18 22:53+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"PO-Revision-Date: 2025-12-06 07:09+0000\n"
+"Last-Translator: ano n <anon1010@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -110,10 +110,8 @@ msgid "Manage virtual machines"
 msgstr "Virtuelle Maschinen verwalten"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "Virtualisierung;libvirt;vm;vmm;"
+msgstr "Virtualisierung;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -176,10 +174,8 @@ msgid "Host _Device:"
 msgstr "_Hostrechner:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Pool starten"
+msgstr "Startkonfiguration:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -708,9 +704,9 @@ msgid ""
 "bootstrap\">virt-bootstrap</a></small>"
 msgstr ""
 "<small>Das Betriebssystembasisverzeichnis muss bereits vorhanden sein. Um "
-"die Erstellung des Betriebssytembasisverzeichnis zu aktivieren, installieren "
-"Sie <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
-"bootstrap</a></small>"
+"die Erstellung des Betriebssytembasisverzeichnis zu aktivieren\n"
+"installieren Sie <a href=\"https://github.com/virt-manager/virt-bootstrap\""
+">virt-bootstrap</a></small>"
 
 #: ui/createvm.ui:1373
 msgid ""
@@ -1874,8 +1870,9 @@ msgid ""
 "identical CPUs in order to migrate the VM."
 msgstr ""
 "Standard CPU-Einstellung für neue VMs. Dies ist gewöhnlich eine Abstimmung "
-"von Leistungs- und  Migrations-Kompatibilität: wird die 'copy host' Option "
-"verwendet, so werden Ihre Server \n"
+"von Leistungs-\n"
+"und Migrations-Kompatibilität: wird die 'copy host' Option verwendet, so "
+"werden Ihre Server\n"
 "identische CPUs benötigen um die VM migrieren zu können."
 
 #: ui/preferences.ui:498
@@ -1885,7 +1882,8 @@ msgstr "_CPU-Vorgabe:"
 #: ui/preferences.ui:522
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
-"Vorgabe Firmware-Einstellung für neue VMs. Wählen Sie entweder BIOS oder UEFI"
+"Standard Firmware-Einstellung für neue VMs. Wählen Sie entweder BIOS oder "
+"UEFI."
 
 #: ui/preferences.ui:524
 msgid "x86 _Firmware:"
@@ -2150,7 +2148,7 @@ msgstr "_Taste senden"
 
 #: ui/vmwindow.ui:299
 msgid "Show the graphical console"
-msgstr "Grafische Konsole anzeigen:"
+msgstr "Grafische Konsole anzeigen"
 
 #: ui/vmwindow.ui:300 virtManager/addhardware.py:267
 msgid "Console"
@@ -2240,7 +2238,7 @@ msgstr "Eingabe"
 #: virtManager/addhardware.py:256 virtManager/addhardware.py:264
 #: virtManager/addhardware.py:273 virtManager/addhardware.py:314
 msgid "Not supported for this guest type."
-msgstr "Für diesen Gasttyp nicht unterstützt"
+msgstr "Für diesen Gasttyp nicht unterstützt."
 
 #: virtManager/addhardware.py:243 virtManager/addhardware.py:1014
 msgid "Graphics"
@@ -2256,7 +2254,7 @@ msgstr "Parallel"
 
 #: virtManager/addhardware.py:269
 msgid "Channel"
-msgstr "Channel"
+msgstr "Kanal"
 
 #: virtManager/addhardware.py:277
 msgid "USB Host Device"
@@ -2835,7 +2833,7 @@ msgstr "Kein verfügbares Gerät"
 #: virtManager/createnet.py:338
 #, python-format
 msgid "Name '%s' already in use by another network."
-msgstr "Name '%s' wird bereits  von einem anderen Netzwerk benutzt."
+msgstr "Name '%s' wird bereits von einem anderen Netzwerk benutzt."
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:312
 #: virtManager/createvol.py:255
@@ -3182,8 +3180,6 @@ msgid "Error continuing install: %s"
 msgstr "Fehler beim Fortsetzen der Installation: %s"
 
 #: virtManager/createvm.py:2055
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Container wird gebootstrappt"
 
@@ -3789,7 +3785,7 @@ msgstr "Leistung"
 
 #: virtManager/details/details.py:2341
 msgid "CPUs"
-msgstr "Anzahl der CPUs:"
+msgstr "Anzahl der CPUs"
 
 #: virtManager/details/details.py:2343
 msgid "Boot Options"
@@ -3994,7 +3990,7 @@ msgstr "Keine Schnappschuss ausgewählt."
 
 #: virtManager/details/snapshots.py:843
 msgid "Multiple snapshots selected."
-msgstr "Mehrere Schnappschüsse ausgewählt"
+msgstr "Mehrere Schnappschüsse ausgewählt."
 
 #: virtManager/details/snapshots.py:853
 #, python-format
@@ -4186,7 +4182,7 @@ msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:72
 msgid "Emulated"
-msgstr "Emuliert:"
+msgstr "Emuliert"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4446,10 +4442,8 @@ msgstr ""
 "libvirt verbinden. Versuchen Sie es als root."
 
 #: virtManager/lib/connectauth.py:189
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "Stellen Sie sicher, dass der »libvirtd«-Dienst läuft."
+msgstr "Stellen Sie sicher, dass dein geeigneter libvirtd-Dienst läuft."
 
 #: virtManager/lib/connectauth.py:192
 #, python-format
@@ -4458,7 +4452,7 @@ msgstr "Verbindung zu libvirt %s kann nicht hergestellt werden."
 
 #: virtManager/lib/connectauth.py:204
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "Fehler bei der Verbindung mit der virtuellen Maschinenverwaltung."
+msgstr "Fehler bei der Verbindung mit der virtuellen Maschinenverwaltung"
 
 #: virtManager/lib/connectauth.py:219
 msgid ""
@@ -4595,7 +4589,7 @@ msgstr "Fehlgeschlagen"
 
 #: virtManager/lib/libvirtenummap.py:126
 msgid "Panicked"
-msgstr "Panicked"
+msgstr "mehrere Fehler sind aufgetreten"
 
 #: virtManager/manager.py:83
 #, python-format
@@ -4747,10 +4741,10 @@ msgid "Migrating VM '%s'"
 msgstr "VM «%s» migrieren"
 
 #: virtManager/migrate.py:393
-#, fuzzy, python-format
-#| msgid "Migrating VM '%s' to %s. This may take a while."
+#, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
-msgstr "VM '%s' wird nach %s migriert. Dies kann einen Augenblick dauern."
+msgstr ""
+"VM '%(name)s' wird nach %(host)s migriert. Dies kann einen Augenblick dauern."
 
 #: virtManager/migrate.py:407
 #, python-format
@@ -4840,7 +4834,7 @@ msgstr "SCSI-Hostadapter"
 
 #: virtManager/object/storagepool.py:32
 msgid "Multipath Device Enumerator"
-msgstr "Multipath Device Enumerator"
+msgstr "Multipath-Geräte-Enumerator"
 
 #: virtManager/object/storagepool.py:33
 msgid "Gluster Filesystem"
@@ -4968,6 +4962,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator ist nicht installiert oder nutzbar, System-tray-Icon nicht "
+"verfügbar auf Wayland"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5060,10 +5056,9 @@ msgid "Error unpausing domain"
 msgstr "Fehler beim Fortsetzen der Domain"
 
 #: virtManager/vmmenu.py:231
-#, fuzzy, python-format
-#| msgid "Error restoring domain"
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Fehler beim Wiederherstellen der Domain"
+msgstr "Fehler beim Wiederherstellen der Domain %s"
 
 #: virtManager/vmmenu.py:234
 msgid ""
@@ -5184,61 +5179,49 @@ msgstr ""
 "Diese Registerkarte wirklich verlassen?"
 
 #: virtinst/capabilities.py:300
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"Wirt unterstützt nicht den Domänentyp %(domain)s%(machine)s für "
-"Virtualisierungstyp »%(virttype)s« Architektur »%(arch)s«"
+"Der Host unterstützt den Virtualisierungstyp „%(virttype)s” für die "
+"Architektur „%(arch)s” nicht"
 
 #: virtinst/capabilities.py:305
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
-"Wirt unterstützt nicht den Domänentyp %(domain)s%(machine)s für "
-"Virtualisierungstyp »%(virttype)s« Architektur »%(arch)s«"
+"Der Host unterstützt keine Virtualisierungsoptionen für die Architektur „%"
+"(arch)s“"
 
 #: virtinst/capabilities.py:309
-#, fuzzy, python-format
-#| msgid "Host does not support %(virttype)s %(arch)s"
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "Wirt unterstützt %(virttype)s %(arch)s nicht"
+msgstr "Der Host unterstützt den Virtualisierungstyp „%(virttype)s“ nicht"
 
 #: virtinst/capabilities.py:313
 msgid "Host does not support any virtualization options"
 msgstr "Der Host unterstützt keine Virtualisierungsoptionen"
 
 #: virtinst/capabilities.py:320
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Wirt unterstützt nicht den Domänentyp %(domain)s%(machine)s für "
-"Virtualisierungstyp »%(virttype)s« Architektur »%(arch)s«"
+"Der Host unterstützt den Domänentyp %(domain)s mit dem Rechner ‚%(machine)s‘ "
+"für den Virtualisierungstyp ‚%(virttype)s‘ mit der Architektur ‚%(arch)s‘ "
+"nicht"
 
 #: virtinst/capabilities.py:331
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Wirt unterstützt nicht den Domänentyp %(domain)s%(machine)s für "
-"Virtualisierungstyp »%(virttype)s« Architektur »%(arch)s«"
+"Der Host unterstützt den Domänentyp %(domain)s für den Virtualisierungstyp ‚%"
+"(virttype)s‘ mit der Architektur ‚%(arch)s‘ nicht"
 
 #: virtinst/cli.py:115
 msgid "See man page for examples and full option syntax."
@@ -5264,16 +5247,14 @@ msgstr ""
 "ansonsten starten Sie bitte die Installation neu."
 
 #: virtinst/cli.py:316
-#, fuzzy, python-format
-#| msgid ""
-#| "%s may not be accessible by the hypervisor. You will need to grant the "
-#| "'%s' user search permissions for the following directories: %s"
+#, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
-"%s ist für den Hypervisor gegebenenfalls nicht zugreifbar. Sie müssen dem "
-"'%s' Benutzer Suchgenehmigung für folgende Verzeichnisse erteilen: %s"
+"Der Hypervisor hat möglicherweise keinen Zugriff auf %(path)s. Sie müssen "
+"dem Benutzer „%(user)s“ Suchberechtigungen für die folgenden Verzeichnisse "
+"erteilen: %(dirs)s"
 
 #: virtinst/cli.py:329
 #, python-format
@@ -5286,27 +5267,25 @@ msgid "This will overwrite the existing path '%s'"
 msgstr "Dieses wird den vorhandenen Pfad '%s' überschreiben"
 
 #: virtinst/cli.py:370
-#, fuzzy, python-format
-#| msgid "Disk %s is already in use by other guests %s."
+#, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
-msgstr "Disk %s wird bereits von anderen Gästen %s verwendet."
+msgstr ""
+"Die Festplatte %(path)s wird bereits von anderen Gästen %(names)s verwendet."
 
 #: virtinst/cli.py:414
-#, fuzzy, python-format
-#| msgid "Connecting to graphical console for guest"
+#, python-format
 msgid "Running graphical console command: %(command)s"
-msgstr "Mit grafischer Konsole für Gast wird verbunden"
+msgstr "Ausführen des grafischen Konsolenbefehls: %(command)s"
 
 #: virtinst/cli.py:426
-#, fuzzy, python-format
+#, python-format
 msgid "Running text console command: %(command)s"
-msgstr "Textkonsolenbefehl wird ausgeführt: %(Befehl)s"
+msgstr "Textkonsolenbefehl wird ausgeführt: %(command)s"
 
 #: virtinst/cli.py:470
-#, fuzzy, python-format
-#| msgid "Could not find domain '%s': %s"
+#, python-format
 msgid "Could not find domain '%(domain)s': %(error)s"
-msgstr "Domain '%s': %s wurde nicht gefunden"
+msgstr "Die Domäne „%(domain)s“ konnte nicht gefunden werden: %(error)s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
@@ -5502,10 +5481,8 @@ msgid "Configure guest sound device emulation"
 msgstr "Klanggeräteemulation des Gastes konfigurieren"
 
 #: virtinst/cli.py:856
-#, fuzzy
-#| msgid "Configure a guest watchdog device"
 msgid "Configure host audio backend for sound devices"
-msgstr "Konfigurieren Sie ein Gast-Watchdog-Gerät"
+msgstr "Konfigurieren Sie das Host-Audio-Backend für Soundgeräte"
 
 #: virtinst/cli.py:860
 msgid "Configure a guest watchdog device"
@@ -5564,16 +5541,12 @@ msgstr ""
 "--panic default"
 
 #: virtinst/cli.py:902
-#, fuzzy
-#| msgid ""
-#| "Configure a guest smartcard device. Ex:\n"
-#| "--smartcard mode=passthrough"
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
-"Konfigurieren Sie ein Gast-Smartcard-Gerät. Beispiel:\n"
-"--smartcard mode=passthrough"
+"Konfigurieren Sie ein gemeinsam genutztes Gastspeichergerät. Beispiel:\n"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:908
 msgid ""
@@ -5860,10 +5833,9 @@ msgstr ""
 "    osinfo-query os\n"
 
 #: virtinst/cloner.py:46
-#, fuzzy, python-format
-#| msgid "Could not remove old vm '%s': %s"
+#, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
-msgstr "Konnte alte vm '%s': %s nicht entfernen"
+msgstr "Die alte VM „%(vm)s“ konnte nicht entfernt werden: %(error)s"
 
 #: virtinst/cloner.py:111
 #, python-format
@@ -5884,7 +5856,7 @@ msgstr "Datenträgerpfad '%s' existiert nicht."
 
 #: virtinst/cloner.py:191
 msgid "Cloning rbd volumes is not yet supported."
-msgstr "Das Klonen von rbd Volumes wird noch nicht unterstützt"
+msgstr "Das Klonen von rbd Volumes wird noch nicht unterstützt."
 
 #: virtinst/cloner.py:194
 #, python-format
@@ -5896,16 +5868,13 @@ msgid "Read Only"
 msgstr "Schreibgeschützt"
 
 #: virtinst/cloner.py:203
-#, fuzzy
-#| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
-msgstr "Speicher ist als freigebbar gekennzeichnet."
+msgstr "Als freigebbar markiert"
 
 #: virtinst/cloner.py:277
-#, fuzzy, python-format
-#| msgid "Could not use path '%s' for cloning: %s"
+#, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Pfad '%s' konnte nicht zum Klonen verwendet werden: %s"
+msgstr "Der Pfad ‚%(path)s‘ konnte nicht zum Klonen verwendet werden: %(error)s"
 
 #: virtinst/cloner.py:297
 #, python-format
@@ -5977,16 +5946,14 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s muss über 5900 sein, oder -1 für automatische Zuweisung"
 
 #: virtinst/devices/hostdev.py:87
-#, fuzzy, python-format
-#| msgid "Don't know how to setup UEFI for arch '%s'"
+#, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
-msgstr "Unbekannt, wie UEFI für Architektur '%s' eingerichtet wird"
+msgstr "Ich weiß nicht, wie man nodedev für die mdev-Typ-ID ‚%s‘ generiert"
 
 #: virtinst/devices/hostdev.py:93 virtinst/devices/interface.py:357
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Unbekannter Knotengerätetyp %s"
+msgstr "Nicht unterstützter Knotengerätetyp '%s'"
 
 #: virtinst/devices/interface.py:218
 #, python-format
@@ -6059,10 +6026,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP Startsicherheit erfordert einen Q35 UEFI Rechner"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV-Startsicherheit erfordert einen Q35 UEFI-Rechner"
+msgstr "TDX-Startsicherheit erfordert einen Q35 UEFI-Rechner"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -6132,10 +6097,11 @@ msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "Domaintyp 'vz' unterstützt keine transienten Installationen."
 
 #: virtinst/install/installertreemedia.py:66
-#, fuzzy, python-format
-#| msgid "Validating install media '%s' failed: %s"
+#, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
-msgstr "Fehler beim Validieren der Installationsmedien '%s': %s"
+msgstr ""
+"Die Validierung des Installationsmediums „%(media)s“ ist fehlgeschlagen: %"
+"(error)s"
 
 #: virtinst/install/installertreemedia.py:125
 msgid "location kernel/initrd may only be specified with a location URL/path"
@@ -6144,10 +6110,8 @@ msgstr ""
 "werden"
 
 #: virtinst/install/installertreemedia.py:128
-#, fuzzy
-#| msgid "An init path must be specified"
 msgid "location kernel/initrd must be specified as a pair"
-msgstr "Ein init-Pfad muss angegeben werden"
+msgstr "Der Speicherort kernel/initrd muss als Paar angegeben werden"
 
 #: virtinst/install/installertreemedia.py:155
 #, python-format
@@ -6245,16 +6209,14 @@ msgstr ""
 "In den virt-install Man-Pages finden Sie verschiedene Distributionsbeispiele."
 
 #: virtinst/install/urlfetcher.py:101
-#, fuzzy, python-format
-#| msgid "Couldn't acquire file %s: %s"
+#, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
-msgstr "Datei %(url)s konnte nicht abgerufen werden: %(error)s"
+msgstr "Die Datei %(url)s konnte nicht abgerufen werden: %(error)s"
 
 #: virtinst/install/urlfetcher.py:105
-#, fuzzy, python-format
-#| msgid "Retrieving file %s..."
+#, python-format
 msgid "Retrieving '%(filename)s'"
-msgstr "Datei %s wird abgerufen..."
+msgstr "Abrufen von „%(filename)s“"
 
 #: virtinst/install/urlfetcher.py:278
 #, python-format
@@ -6262,10 +6224,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Öffnen der URL %(url)s ist fehlgeschlagen: %(error)s"
 
 #: virtinst/install/volumeupload.py:107
-#, fuzzy, python-format
-#| msgid "Transferring %s"
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "Übertragung von %s"
+msgstr "Übertragen von „%(filename)s“"
 
 #: virtinst/osdict.py:72
 msgid "Generic or unknown OS. Usage is not recommended."
@@ -6299,10 +6260,10 @@ msgstr ""
 "Architektur „%(archname)s“"
 
 #: virtinst/storage.py:162
-#, fuzzy, python-format
-#| msgid "Couldn't create default storage pool '%s': %s"
+#, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr "Standardspeicher-Pool »%s« konnte nicht erstellt werden: %s"
+msgstr ""
+"Der Standardspeicherpool „%(path)s“ konnte nicht erstellt werden: %(error)s"
 
 #: virtinst/storage.py:218 virtinst/storage.py:563
 msgid "Storage object"
@@ -6348,49 +6309,38 @@ msgstr ""
 "Kapazität gleichgesetzt"
 
 #: virtinst/storage.py:714
-#, fuzzy, python-format
-#| msgid "Allocating '%s'"
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "Zuweisen von '%s'"
+msgstr "Zuweisen von '%(filename)s'"
 
 #: virtinst/storage.py:755
-#, fuzzy, python-format
-#| msgid ""
-#| "There is not enough free space on the storage pool to create the volume. "
-#| "(%d M requested allocation > %d M available)"
+#, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
-"Es ist nicht genügend freier Speicherplatz auf dem Speicher-Pool vorhanden, "
-"um den Datenträger zu erstellen. (%d M angeforderte Zuteilung > %d M "
+"Auf dem Speicherpool ist nicht genügend freier Speicherplatz vorhanden, um "
+"das Volume zu erstellen. (%(mem1)s M angeforderte Zuweisung > %(mem2)s M "
 "verfügbar)"
 
 #: virtinst/storage.py:762
-#, fuzzy, python-format
-#| msgid ""
-#| "The requested volume capacity will exceed the available pool space when "
-#| "the volume is fully allocated. (%d M requested capacity > %d M available)"
+#, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
 msgstr ""
-"Die angeforderte Datenträgerkapazität übersteigt den verfügbaren Pool-"
-"Speicherplatz, wenn der Datenträger voll zugeteilt wird. (%d M angeforderte "
-"Kapazität > %d M verfügbar)"
+"Die angeforderte Volume-Kapazität überschreitet den verfügbaren "
+"Speicherplatz, wenn das Volume vollständig zugewiesen ist. (%(mem1)s M "
+"angeforderte Kapazität > %(mem2)s M verfügbar)"
 
 #: virtinst/virtclone.py:20
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
-"Ein originaler Maschinenname ist erforderlich, versuchen Sie es noch einmal "
-"mit '--original ORIGINAL_GUEST'."
+"Ein ursprünglicher Maschinenname ist erforderlich. Verwenden Sie „--original "
+"quell_name“ und versuchen Sie es erneut."
 
 #: virtinst/virtclone.py:66
 msgid ""
@@ -6483,7 +6433,7 @@ msgstr ""
 
 #: virtinst/virtclone.py:134
 msgid "New file to use as storage for nvram VARS"
-msgstr "Neue Datei als Speicher für nvram VARS verwenden."
+msgstr "Neue Datei als Speicher für nvram VARS verwenden"
 
 #: virtinst/virtclone.py:137
 msgid "Networking Configuration"
@@ -6503,13 +6453,12 @@ msgid "Miscellaneous Options"
 msgstr "Sonstige Optionen"
 
 #: virtinst/virtclone.py:179
-#, fuzzy
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
-"Entweder --auto-clone oder --file ist erforderlich, benutzen '--auto-clone "
-"oder --file' und versuchen sie es noch einmal."
+"Entweder --auto-clone oder --file ist erforderlich. Verwenden Sie „--auto-"
+"clone oder --file“ und versuchen Sie es erneut."
 
 #: virtinst/virtclone.py:215
 msgid ""
@@ -6594,15 +6543,13 @@ msgid "See the man page for examples of using --location with CDROM media"
 msgstr "Siehe Manpage für Beispiele wie man --location mit einer CDROM nutzt"
 
 #: virtinst/virtinstall.py:356
-#, fuzzy, python-format
-#| msgid ""
-#| "Requested memory %s MiB is less than the recommended %s MiB for OS %s"
+#, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
-"Angeforderter Speicher %s MiB ist niedriger als die empfohlenen %s MiB für "
-"Betriebssystem %s"
+"Der angeforderte Speicher %(mem1)s MiB ist kleiner als der empfohlene "
+"Speicher %(mem2)s MiB für das Betriebssystem %(osname)s"
 
 #: virtinst/virtinstall.py:363
 #, python-format
@@ -6618,16 +6565,14 @@ msgstr ""
 "Die Netzwerkkonfiguration des Gastes unterstützt möglicherweise kein PXE"
 
 #: virtinst/virtinstall.py:385
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Es wurde kein Betriebssystem erkannt, worunter die VM-Leistung leiden kann. "
-"Geben Sie ein OS mit  --os-variant für optimale Ergebnisse an."
+"Bei Verwendung von --osinfo {osname} kann die VM-Leistung beeinträchtigt "
+"werden. Geben Sie ein genaues Betriebssystem an, um optimale Ergebnisse zu "
+"erzielen."
 
 #: virtinst/virtinstall.py:401
 #, python-brace-format
@@ -6672,16 +6617,13 @@ msgid "Error validating install location: %s"
 msgstr "Fehler beim Überprüfen des Installationsortes: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo Der Name des Betriebssystems ist erforderlich, aber es "
-"wurde kein Wert gesetzt oder erkannt."
+"--osinfo/--os-variant Der Name des Betriebssystems ist erforderlich, es "
+"wurde jedoch kein Wert\n"
+"festgelegt oder erkannt."
 
 #: virtinst/virtinstall.py:600
 msgid ""
@@ -6976,49 +6918,39 @@ msgstr "Minuten abwarten, bis Installation abgeschlossen ist."
 
 #: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
-msgstr "Bitte geben Sie »Ja« oder »Nein« ein:"
+msgstr "Bitte geben Sie »Ja« oder »Nein« ein."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo wird mit --edit nicht unterstützt"
+msgstr "--osinfo/--os-variant wird mit --edit nicht unterstützt"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr "--os-variant/--osinfo wird nicht unterstützt mit --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
 msgstr "--os-variant/--osinfo wird nicht unterstützt mit --build-xml"
 
 #: virtinst/virtxml.py:113
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml wird nicht unterstützt für --%s"
+msgstr "--build-xml wird nicht unterstützt für {cli_flag}"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "--remove-device kann nicht verwendet werden mit --%s"
+msgstr "--remove-device kann nicht verwendet werden mit {cli_flag}"
 
 #: virtinst/virtxml.py:128
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "--add-device kann nicht verwendet werden mit --%s"
+msgstr "--add-device kann nicht verwendet werden mit {cli_flag}"
 
 #: virtinst/virtxml.py:135
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "Unbekannt, wie --update für --%s ermittelt wird"
+msgstr "Unbekannt, wie --update für {cli_flag} ermittelt wird"
 
 #: virtinst/virtxml.py:151
 #, python-format
@@ -7046,22 +6978,24 @@ msgid "Invalid --edit option '%s'"
 msgstr "Ungültige --edit Option '%s'"
 
 #: virtinst/virtxml.py:216
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "Keine --%s Objekte in der XML gefunden"
+msgstr "Keine {cli_flag} Objekte in der XML gefunden"
 
 #: virtinst/virtxml.py:223
-#, fuzzy, python-brace-format
-#| msgid "--edit %s requested but there's only %s --%s object in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
 msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
-msgstr[0] "--edit %s angefordert, aber es gibt nur %s --%s Objekt in XML"
-msgstr[1] "--edit %s angefordert, aber es gibt nur %s --%s Objekte in XML"
+msgstr[0] ""
+"--edit {number} angefordert, aber es gibt nur {maxnum} {cli_flag} Objekt in "
+"XML"
+msgstr[1] ""
+"--edit {number} angefordert, aber es gibt nur {maxnum} {cli_flag} Objekte in "
+"XML"
 
 #: virtinst/virtxml.py:244
 #, python-format
@@ -7069,11 +7003,12 @@ msgid "No matching objects found for %s"
 msgstr "Keine passenden Objekte für %s gefunden"
 
 #: virtinst/virtxml.py:261
-#, fuzzy, python-brace-format
-#| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
-msgstr "'--edit %s' macht keinen Sinn mit --%s, verwenden Sie leeres '--edit'"
+msgstr ""
+"'--edit {option}' ergibt keinen Sinn mit {cli_flag}, verwenden Sie ein "
+"leeres '--edit'"
 
 #: virtinst/virtxml.py:334
 #, python-format
@@ -7091,10 +7026,9 @@ msgid "Start '%s' with the changed XML?"
 msgstr "Starte '%s' mit dem geänderten XML?"
 
 #: virtinst/virtxml.py:359 virtinst/virtxml.py:671
-#, fuzzy, python-format
-#| msgid "Error starting domain"
+#, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
-msgstr "Fehler beim Starten der Domain"
+msgstr "Fehler beim Starten der Domäne ‚%(domain)s‘: %(error)s"
 
 #: virtinst/virtxml.py:366 virtinst/virtxml.py:677
 #, python-format
@@ -7113,16 +7047,14 @@ msgstr ""
 "Hotplug dieses Geräts an den Gast „%(domain)s“?"
 
 #: virtinst/virtxml.py:373
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotplug successful."
-msgstr "Gerät %s erfolgreich."
+msgstr "Gerät erfolgreich angeschlossen."
 
 #: virtinst/virtxml.py:374
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "Fehler beim Versuch des Gerätes %s: %s"
+msgstr ""
+"Fehler beim Versuch, das Gerät im laufenden Betrieb anzuschließen: %(error)s"
 
 #: virtinst/virtxml.py:376
 #, python-format
@@ -7136,16 +7068,14 @@ msgstr ""
 "Dieses Gerät vom Gast „%(domain)s“ entfernen?"
 
 #: virtinst/virtxml.py:377
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotunplug successful."
-msgstr "Gerät %s erfolgreich."
+msgstr "Gerät erfolgreich entfernt."
 
 #: virtinst/virtxml.py:378
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Fehler beim Versuch des Gerätes %s: %s"
+msgstr ""
+"Fehler beim Versuch, das Gerät im laufenden Betrieb zu entfernen: %(error)s"
 
 #: virtinst/virtxml.py:380
 #, python-format
@@ -7154,6 +7084,9 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Dieses Gerät für den Gast '%(domain)s' aktualisieren?"
 
 #: virtinst/virtxml.py:381
 msgid "Device update successful."
@@ -7167,6 +7100,8 @@ msgstr "Fehler beim Versuch der Geräteaktualisierung: %(error)s"
 #: virtinst/virtxml.py:433
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
+"Es wurde kein XML Vergleich generiert. Die angeforderten Änderungen haben "
+"keine Auswirkungen."
 
 #: virtinst/virtxml.py:452
 msgid "Edit libvirt XML using command line options."
@@ -7219,6 +7154,8 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
+"Ausgabe des erstellten Geräts als XML. Die Angabe der Domäne ist optional, "
+"wird jedoch empfohlen, um optimale Standardeinstellungen zu gewährleisten."
 
 #: virtinst/virtxml.py:497
 msgid "Output options"
@@ -7245,7 +7182,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:515
 msgid "Force not defining the domain."
-msgstr ""
+msgstr "Zwingen, die Domain nicht zu definieren."
 
 #: virtinst/virtxml.py:518
 msgid "Start the domain."
@@ -7264,20 +7201,20 @@ msgid "Require confirmation before saving any results."
 msgstr "Vor dem Speichern der Ergebnisse Bestätigung erfordern."
 
 #: virtinst/virtxml.py:535
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "Widersprüchliche Optionen %s"
+msgstr "Umwandlungsoptionen"
 
 #: virtinst/virtxml.py:541
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Konvertieren Sie eine vorhandene VM von PC/i440FX zu Q35."
 
 #: virtinst/virtxml.py:550
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Konvertieren Sie eine vorhandene VM für die Verwendung von VNC-Grafiken. "
+"Dadurch werden alle Reste von Spice-Grafiken entfernt."
 
 #: virtinst/virtxml.py:555
 msgid "XML options"
@@ -7297,17 +7234,21 @@ msgstr "Eine Domain muss angegeben werden"
 
 #: virtinst/virtxml.py:647
 msgid "The VM is not running, --update is inapplicable."
-msgstr ""
+msgstr "Die VM läuft nicht, --update ist nicht anwendbar."
 
 #: virtinst/virtxml.py:680
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
+"Die Änderungen werden wirksam, nachdem die Domäne vollständig "
+"heruntergefahren wurde."
 
 #: virtinst/virtxml.py:684
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
+"XML hat sich nach der Domänendefinition nicht geändert. Möglicherweise haben "
+"Sie einen Wert geändert, den libvirt standardmäßig festlegt."
 
 #: virtinst/virtxml.py:699
 msgid "Aborted at user request"
@@ -7319,6 +7260,8 @@ msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
+"XML hatte nicht den erwarteten Root-Elementnamen ‚%(expectname)s‘, gefunden "
+"wurde '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:517
@@ -7330,6 +7273,8 @@ msgstr "Ein Name muss für %s angegeben werden"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
+"Der Name „%(name)s” des Objekttyps „%(objecttype)s” darf das Zeichen „%(char)"
+"s” nicht enthalten."
 
 #~ msgid "vmm;"
 #~ msgstr "vmm;"

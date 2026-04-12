@@ -12,7 +12,6 @@
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -35,6 +34,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/linux2020.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>

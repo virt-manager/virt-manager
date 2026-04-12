@@ -561,6 +561,16 @@ def testNewKVMQ35UEFI(app):
     new_xml = lib.utils.get_xmleditor_xml(app, details)
     assert 'os firmware="efi"' in new_xml
 
+    # Add a TPM device
+    details.find("add-hardware", "push button").click()
+    addhw = app.find_window("Add New Virtual Hardware")
+    addhw.find("TPM", "table cell").click()
+    tab = addhw.find("tpm-tab", None)
+    lib.utils.check(lambda: tab.showing)
+    addhw.find("Finish", "push button").click()
+    lib.utils.check(lambda: not addhw.active)
+    lib.utils.check(lambda: details.active)
+
     # Finish
     details.find_fuzzy("Begin Installation", "button").click()
     lib.utils.check(lambda: details.dead)
@@ -973,6 +983,8 @@ def testNewVMXenPV(app):
 
 
 def testNewVMInstallFail(app):
+    app.open(extra_opts=["--test-options=disable-name-validation"])
+
     def dofail():
         _newvm = _open_newvm(app)
         _newvm.find_fuzzy("Manual", "radio").click()

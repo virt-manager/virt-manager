@@ -108,6 +108,7 @@ def testDetailsRenameSimple(app):
     """
     Rename a simple VM
     """
+    app.open(extra_opts=["--test-options=disable-name-validation"])
     origname = "test-clone-simple"
     win = app.manager_open_details(origname)
     _testRename(app, win, origname, origname)
@@ -118,6 +119,7 @@ def testDetailsRenameNVRAM(app):
     """
     Rename a VM that will trigger the nvram behavior
     """
+    app.open(extra_opts=["--test-options=disable-name-validation"])
     origname = "test-many-devices"
     win = app.manager_open_details(origname, shutdown=True)
     _testRename(app, win, origname, "test-new-name")
@@ -566,9 +568,15 @@ def testDetailsEditDevices1(app):
     app.click_alert_button("Are you sure", "Yes")
     lib.utils.check(lambda: cell.text != oldtext)
 
-    # Host device
+    # Host PCI device
     tab = _select_hw(app, win, "PCI 0000:00:19.0", "host-tab")
     tab.find("ROM BAR:", "check box").click()
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+
+    # Host USB device
+    tab = _select_hw(app, win, "USB 003:002", "host-tab")
+    tab.combo_select("Startup Policy:", "requisite")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 
@@ -711,7 +719,7 @@ def testDetailsMiscEdits(app):
     # Unapplied changes but clicking yes
     share.click()
     hwlist.find("CPUs", "table cell").click()
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find_fuzzy("There are unapplied changes", "label")
     alert.find_fuzzy("Don't warn", "check box").click()
     alert.find("Yes", "push button").click()

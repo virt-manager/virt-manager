@@ -116,6 +116,7 @@ def testSnapshotMisc1(app):
     Test snapshot corner cases
     """
     vmname = "test-state-managedsave"
+    # app.open(extra_opts=["--test-options=disable-name-validation"], show_console=vmname)
     win = _open_snapshots_window(app, vmname)
     vmrun = win.find("Restore", "push button")
 
@@ -141,7 +142,7 @@ def testSnapshotMisc1(app):
     newwin = app.find_window("Create snapshot")
     newwin.find("internal", "radio button").click()
     # Force validation error
-    newwin.find("Name:", "text").set_text("bad name")
+    newwin.find("Name:", "text").set_text("bad/name")
     newwin.find("Finish", "push button").click()
     app.click_alert_button("validating snapshot", "OK")
     # Force name collision

@@ -180,7 +180,7 @@ class vmmSerialConsole(vmmGObject):
         """
         Check if we think we can actually open passed console/serial dev
         """
-        usable_types = ["pty"]
+        usable_types = ["pty", "nmdm"]
         ctype = dev.type
 
         err = ""

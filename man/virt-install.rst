@@ -707,7 +707,7 @@ disk image. The device used for booting is the first device specified via
 Additional kernel command line arguments to pass to the installer when
 performing a guest install from ``--location``. One common usage is specifying
 an anaconda kickstart file for automated installs, such as
---extra-args "ks=https://myserver/my.ks"
+``--extra-args "inst.ks=https://myserver/my.ks"``
 
 
 
@@ -718,7 +718,7 @@ an anaconda kickstart file for automated installs, such as
 
 Add PATH to the root of the initrd fetched with ``--location``. This can be
 used to run an automated install without requiring a network hosted kickstart
-file: ``--initrd-inject=/path/to/my.ks --extra-args "ks=file:/my.ks"``
+file: ``--initrd-inject=/path/to/my.ks --extra-args "inst.ks=file:/my.ks"``
 
 
 
@@ -947,22 +947,9 @@ Some examples:
     Have guest permanently boot off a local kernel/initrd pair, with the
     specified kernel options.
 
-``--boot kernel=KERNEL,initrd=INITRD,dtb=DTB``
-    Have guest permanently boot off a local kernel/initrd pair with an
-    external device tree binary. DTB can be required for some non-x86
-    configurations like ARM or PPC
-
-``--boot loader=BIOSPATH``
-    Use BIOSPATH as the virtual machine BIOS.
-
 ``--boot bootmenu.enable=on,bios.useserial=on``
     Enable the bios boot menu, and enable sending bios text output over
     serial console.
-
-``--boot init=INITPATH``
-    Path to a binary that the container guest will init. If a root ``--filesystem``
-    has been specified, virt-install will default to /sbin/init, otherwise
-    will default to /bin/sh.
 
 ``--boot uefi``, ``--boot uefi=on``
     Configure the VM to boot from UEFI. In order for virt-install to know the
@@ -973,26 +960,24 @@ Some examples:
 ``--boot uefi=off``
     Do not use UEFI if the VM would normally default to it.
 
-``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=yes,firmware.feature1.name=enrolled-keys,firmware.feature1.enabled=yes``
-    Configure the VM to boot from UEFI with Secure Boot support enabled.
-    Only signed operating systems will be able to boot with this configuration.
+``--boot uefi,secure-boot=on|off``
+    Require or forbid Secure Boot enforcement, overriding the ``--boot uefi``
+    default. Typically the default is ``on``.
 
-``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=no``
-    Configure the VM to boot from UEFI with Secure Boot support disabled.
-    This configuration allows both signed and unsigned operating systems to
-    run.
+    If your VM install fails to boot, and UEFI in the VM shows an error
+    with 'Access Denied', you may need to set ``secure-boot=off`` to
+    install your VM.
+
+``--boot uefi,firmware.secure-boot=yes|no``
+    Convenience option for toggling individual firmware features on or
+    off in domain XML. If you don't know you need this, just use
+    ``--boot uefi,secure-boot=`` instead.
 
     Additional information about the ``secure-boot`` and
     ``enrolled-keys`` firmware features and how they can be used to
     influence firmware selection is available at
     https://libvirt.org/kbase/secureboot.html
 
-``--boot loader=/.../OVMF_CODE.fd,loader.readonly=yes,loader.type=pflash,nvram.template=/.../OVMF_VARS.fd,loader_secure=no``
-    Specify that the virtual machine use the custom OVMF binary as boot firmware,
-    mapped as a virtual flash chip. In addition, request that libvirt instantiate
-    the VM-specific UEFI varstore from the custom "/.../OVMF_VARS.fd" varstore
-    template. This setup is not recommended, and should only be used if
-    --boot uefi doesn't know about your UEFI binaries.
 
 Use --boot=? to see a list of all available sub options.
 Complete details at

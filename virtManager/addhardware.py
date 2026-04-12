@@ -472,6 +472,7 @@ class vmmAddHardware(vmmGObjectUI):
     def controller_recommended_types():
         return [
             DeviceController.TYPE_SCSI,
+            DeviceController.TYPE_NVME,
             DeviceController.TYPE_USB,
             DeviceController.TYPE_VIRTIOSERIAL,
             DeviceController.TYPE_CCID,
@@ -482,6 +483,7 @@ class vmmAddHardware(vmmGObjectUI):
         labels = {
             DeviceController.TYPE_IDE: _("IDE"),
             DeviceController.TYPE_FDC: _("Floppy"),
+            DeviceController.TYPE_NVME: _("NVMe"),
             DeviceController.TYPE_SCSI: _("SCSI"),
             DeviceController.TYPE_SATA: _("SATA"),
             DeviceController.TYPE_VIRTIOSERIAL: _("VirtIO Serial"),
@@ -510,6 +512,7 @@ class vmmAddHardware(vmmGObjectUI):
                 ret.append("ide")
             ret.append("sata")
             ret.append("fdc")
+            ret.append("nvme")
             ret.append("scsi")
             ret.append("usb")
 
@@ -531,7 +534,7 @@ class vmmAddHardware(vmmGObjectUI):
             buses = vmmAddHardware.disk_old_recommended_buses(guest)
 
         bus_map = {
-            "disk": ["ide", "sata", "scsi", "sd", "usb", "virtio", "xen"],
+            "disk": ["ide", "nvme", "sata", "scsi", "sd", "usb", "virtio", "xen"],
             "floppy": ["fdc"],
             "cdrom": ["ide", "sata", "scsi", "usb"],
             "lun": ["scsi"],
@@ -542,6 +545,7 @@ class vmmAddHardware(vmmGObjectUI):
     def disk_pretty_bus(bus):
         bus_mappings = {
             "ide": _("IDE"),
+            "nvme": _("NVMe"),
             "sata": _("SATA"),
             "scsi": _("SCSI"),
             "sd": _("SD"),
@@ -562,7 +566,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def sound_recommended_models(_guest):
-        return ["ich6", "ich9", "ac97"]
+        return ["ich6", "ich9", "ac97", "usb"]
 
     @staticmethod
     def sound_pretty_model(model):
@@ -1425,16 +1429,33 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _set_disk_controller(self, disk):
-        # Add a SCSI controller with model virtio-scsi if needed
+        # Add a SCSI controller with model virtio-scsi if needed or
+        # add an NVMe controller if needed
         disk.vmm_controller = None
-        if not self.vm.xmlobj.can_default_virtioscsi():
-            return
 
-        controller = DeviceController(self.conn.get_backend())
-        controller.type = "scsi"
-        controller.model = "virtio-scsi"
-        controller.index = 0
-        disk.vmm_controller = controller
+        if disk.bus == "scsi":
+            if not self.vm.xmlobj.can_default_virtioscsi():
+                return
+
+            controller = DeviceController(self.conn.get_backend())
+            controller.type = "scsi"
+            controller.model = "virtio-scsi"
+            controller.index = 0
+            disk.vmm_controller = controller
+
+        elif disk.bus == "nvme":
+            nvme_controllers = [c for c in self.vm.xmlobj.devices.controller if c.type == "nvme"]
+            if len(nvme_controllers) > 0:
+                if not disk.serial:
+                    disk.serial = nvme_controllers[0].serial
+            else:
+                if not disk.serial:
+                    disk.serial = "0"
+                controller = DeviceController(self.conn.get_backend())
+                controller.type = "nvme"
+                controller.index = 0
+                controller.serial = disk.serial
+                disk.vmm_controller = controller
 
     def _build_storage(self):
         bus = uiutil.get_list_selection(self.widget("storage-bustype"))
@@ -1454,7 +1475,7 @@ class vmmAddHardware(vmmGObjectUI):
                 used.append(d.target)
 
         self._set_disk_controller(disk)
-        disk.generate_target(used)
+        disk.generate_target(used, self.vm.xmlobj)
         return disk
 
     def _build_network(self):
@@ -1586,12 +1607,18 @@ class vmmAddHardware(vmmGObjectUI):
         controller_num = [x for x in controllers if (x.type == controller_type)]
         if len(controller_num) > 0:
             index_new = max(int(x.index or 0) for x in controller_num) + 1
-            dev.index = index_new
+        else:
+            index_new = 0
+        dev.index = index_new
 
         dev.type = controller_type
 
         if model and model != "none":
             dev.model = model
+
+        if controller_type == DeviceController.TYPE_NVME:
+            dev.serial = str(dev.index)
+
         return dev
 
     def _build_rng(self):

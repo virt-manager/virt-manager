@@ -10,7 +10,7 @@ i18n.merge_file(
 )
 
 i18n.merge_file(
-  input: appdata_file,
+  input: metainfo_file,
   output: '@BASENAME@',
   type: 'xml',
   po_dir: meson.current_source_dir(),

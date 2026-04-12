@@ -13,8 +13,6 @@
     <type arch="aarch64" machine="virt">hvm</type>
     <loader>CODE.fd</loader>
     <nvram template="VARS.fd"/>
-    <boot dev="cdrom"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -29,12 +27,14 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
       <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-f26-netinst.iso"/>
       <target dev="sda" bus="scsi"/>
       <readonly/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="scsi" model="virtio-scsi"/>
@@ -96,7 +96,6 @@
     <type arch="aarch64" machine="virt">hvm</type>
     <loader>CODE.fd</loader>
     <nvram template="VARS.fd"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -111,6 +110,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <disk type="file" device="cdrom">
       <target dev="sda" bus="scsi"/>

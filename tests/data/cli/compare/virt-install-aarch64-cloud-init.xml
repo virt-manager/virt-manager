@@ -95,7 +95,6 @@
   <vcpu>2</vcpu>
   <os firmware="efi">
     <type arch="aarch64" machine="virt">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -108,6 +107,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>

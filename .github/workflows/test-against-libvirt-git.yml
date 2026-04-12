@@ -4,6 +4,7 @@ on:
   # Run every 3 days at midnight
   schedule:
     - cron: '0 0 */3 * *'
+  workflow_dispatch:
 
 jobs:
   test-against-libvirt-git:
@@ -22,18 +23,20 @@ jobs:
           rpm-build \
           dnf-plugins-core \
           glibc-langpack-en \
-          python3-pytest \
-          python3-pytest-error-for-skips
+          python3-pytest
 
         dnf install -y \
           gettext \
+          gobject-introspection \
           python3-devel \
           python3-docutils \
           meson
 
+        pip install pytest-error-for-skips
+
         dnf builddep -y libvirt
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Build RPM and test install
       run: |
