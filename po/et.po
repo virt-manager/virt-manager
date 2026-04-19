@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager 5.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2026-02-17 23:58+0000\n"
+"PO-Revision-Date: 2026-04-19 02:58+0000\n"
 "Last-Translator: Priit Jõerüüt "
 "<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/virt-"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.17\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -498,11 +498,11 @@ msgstr "<b>Nimelahenduse domeeninimi</b>"
 
 #: ui/createpool.ui:9
 msgid "Add a New Storage Pool"
-msgstr "Lisa uus salvestusruumi puul"
+msgstr "Lisa uus salvestusruumi kogum (puul)"
 
 #: ui/createpool.ui:50
 msgid "<span size='large'>Create storage pool</span>"
-msgstr "<span size='large'>Lisa salvestusruumi puul</span>"
+msgstr "<span size='large'>Loo salvestusruumi kogum (puul)</span>"
 
 #: ui/createpool.ui:149
 msgid "Tar_get Path:"
@@ -2819,16 +2819,16 @@ msgstr "Lähteadapter:"
 #: virtManager/createpool.py:325
 #, python-format
 msgid "Error creating pool: %s"
-msgstr "Viga puuli loomisel: %s"
+msgstr "Viga andmeruumikogumi (puuli) loomisel: %s"
 
 #: virtManager/createpool.py:348
 #, python-format
 msgid "Error validating pool: %s"
-msgstr "Viga puuli õigsuse kontrollimisel: %s"
+msgstr "Viga andmeruumikogumi (puuli) õigsuse kontrollimisel: %s"
 
 #: virtManager/createpool.py:357
 msgid "Creating storage pool..."
-msgstr "Loon andmeruumi puuli..."
+msgstr "Loon andmeruumikogumit (puuli)..."
 
 #: virtManager/createpool.py:358
 msgid "Creating the storage pool may take a while..."
@@ -3770,6 +3770,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Sama virtuaalmasina sisemiste ja väliste hetktõmmiste omavahel segamine pole "
+"soovitatud. Kas oled kindel, et soovid jätkata?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -3912,7 +3914,7 @@ msgstr ""
 
 #: virtManager/details/sshtunnels.py:71
 msgid "Guest is configured for TLS only which does not work over SSH."
-msgstr ""
+msgstr "Külalissüsteem on seadistatud vaid TLS-i jaoks, mis ei toimi üle SSH."
 
 #: virtManager/details/sshtunnels.py:81
 #, python-format
@@ -3963,7 +3965,7 @@ msgstr "Ära küsi nende kaustade kohta enam uuesti."
 #: virtManager/device/addstorage.py:144
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
-msgstr ""
+msgstr "Järgmiste kaustade õiguste muutmisel tekkis vigu:"
 
 #: virtManager/device/addstorage.py:263
 msgid "A storage path must be specified."
@@ -4657,6 +4659,7 @@ msgstr "Libvirt-i ühendus ei toeta hetktõmmist tegemist."
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
+"Määratletud seadet ei leidunud mitteaktiivse virtuaalmasina seadistustest: %s"
 
 #: virtManager/object/domain.py:1490
 msgid "Saving domain to disk"
@@ -4732,7 +4735,7 @@ msgstr "RADOS-i plokkseade või ceph"
 
 #: virtManager/object/storagepool.py:35
 msgid "ZFS Pool"
-msgstr "ZFS-i puul"
+msgstr "ZFS-i andmeruumikogum (puul)"
 
 #: virtManager/oslist.py:29
 msgid "Type to start searching..."
@@ -4775,7 +4778,7 @@ msgstr "Rakenduse vaikimisi väärtus"
 
 #: virtManager/preferences.py:173
 msgid "Nearest host CPU model"
-msgstr ""
+msgstr "Lähim alussüsteemi protsessori mudel"
 
 #: virtManager/preferences.py:185
 msgid "System default"
@@ -5110,7 +5113,7 @@ msgstr ""
 
 #: virtinst/cli.py:115
 msgid "See man page for examples and full option syntax."
-msgstr ""
+msgstr "Näiteid ja täismahus valikute süntaksi leiad abiteabe (man) lehelt."
 
 #: virtinst/cli.py:118
 msgid "Use '--option=?' or '--option help' to see available suboptions"
@@ -5318,11 +5321,11 @@ msgstr ""
 
 #: virtinst/cli.py:809
 msgid "Configure a guest serial device"
-msgstr "Seadista jadaühenduse külalisseadet"
+msgstr "Seadista jadaühendusega külalisseadet"
 
 #: virtinst/cli.py:811
 msgid "Configure a guest parallel device"
-msgstr ""
+msgstr "Seadista rööpühendusega külalisseadet"
 
 #: virtinst/cli.py:814
 msgid "Configure a guest communication channel"
@@ -5476,15 +5479,15 @@ msgstr ""
 
 #: virtinst/cli.py:1002
 msgid "Configure VM power management features"
-msgstr ""
+msgstr "Seadista virtuaalmasina toitehaldust"
 
 #: virtinst/cli.py:1006
 msgid "Configure VM lifecycle management policy"
-msgstr ""
+msgstr "Seadista virtuaalmasina elutsükli haldusreegleid"
 
 #: virtinst/cli.py:1011
 msgid "Configure VM resource partitioning (cgroups)"
-msgstr ""
+msgstr "Seadista virtuaalmasina ressursside partitsioneerimist (cgroups)"
 
 #: virtinst/cli.py:1019
 msgid ""
@@ -5575,11 +5578,11 @@ msgstr ""
 #: virtinst/cli.py:1729 virtinst/cli.py:1760
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
-msgstr ""
+msgstr "Viga: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
+msgstr "Ekraani tuvastamine ei õnnestu. Seega virt-viewer jääb käivitamata."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5590,16 +5593,18 @@ msgstr ""
 #: virtinst/cli.py:2213
 #, python-format
 msgid "Unknown autoconsole type '%s'"
-msgstr ""
+msgstr "Automaatse konsooli tundmatu tüüp „%s“"
 
 #: virtinst/cli.py:2615
 msgid "CPU model=host is deprecated, use model=host-model"
 msgstr ""
+"Protsessori „model=host“ kasutus on lõppenud, selle asemel kasuta „"
+"model=host-model“ valikut"
 
 #: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
-msgstr ""
+msgstr "„size“ suuruse väärtus pole sobilik: %s"
 
 #: virtinst/cli.py:3928
 #, python-format
@@ -5609,6 +5614,8 @@ msgstr ""
 #: virtinst/cli.py:3944
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
+"Andmeruumi köide peab olema määratetud kui „vol=andmeruumikoguminimi/"
+"köitenimi“"
 
 #: virtinst/cli.py:4470
 #, python-format
@@ -6643,11 +6650,11 @@ msgstr ""
 #: virtinst/virtxml.py:153
 #, python-format
 msgid "Conflicting options %s"
-msgstr ""
+msgstr "Vastuolus valikud %s"
 
 #: virtinst/virtxml.py:167
 msgid "No change specified."
-msgstr ""
+msgstr "Ühtegi muudatust pole määratletud."
 
 #: virtinst/virtxml.py:170
 #, python-format
@@ -6721,7 +6728,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:373
 msgid "Device hotplug successful."
-msgstr ""
+msgstr "Seadme ühendamine töötava süsteemiga õnnestus."
 
 #: virtinst/virtxml.py:374
 #, python-format
@@ -6738,7 +6745,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:377
 msgid "Device hotunplug successful."
-msgstr ""
+msgstr "Seadme lahtiühendamine töötavast süsteemist õnnestus."
 
 #: virtinst/virtxml.py:378
 #, python-format
