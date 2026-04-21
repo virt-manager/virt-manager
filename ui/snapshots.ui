@@ -16,7 +16,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkPaned" id="spaned1">
+          <object class="GtkPaned" id="snapshot-paned">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="position">200</property>
@@ -25,7 +25,7 @@
               <object class="GtkScrolledWindow" id="scrolledwindow7">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
+                <property name="hscrollbar-policy">automatic</property>
                 <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="snapshot-list">
@@ -48,7 +48,7 @@
                 </child>
               </object>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
