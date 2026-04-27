@@ -6,6 +6,10 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from virtManager import virtmanager  # noqa: E402
-
-virtmanager.runcli()
+if "--qt" in sys.argv:
+    sys.argv.remove("--qt")
+    from qt.__main__ import main as qt_main
+    sys.exit(qt_main())
+else:
+    from virtManager import virtmanager
+    virtmanager.runcli()
