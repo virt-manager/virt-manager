@@ -30,11 +30,14 @@ Minimum version requirements of major components:
    - libosinfo >= 0.2.10
    - gtksourceview >= 3
 
-On Debian or Ubuntu based distributions, you need to install the
-`gobject-introspection` bindings for some dependencies like `libvirt-glib`
-and `libosinfo`. Look for package names that start with `'gir'`, for example
-`gir1.2-libosinfo-1.0`.
+### Debian/Ubuntu
 
+```
+sudo apt install gir1.2-gtk-3.0 gir1.2-gtk-vnc-2.0 gir1.2-gtksource-4 gir1.2-libosinfo-1.0 gir1.2-libvirt-glib-1.0 gir1.2-vte-2.91 python3-gi python3-gi-cairo python3-libvirt virtinst dconf-gsettings-backend gsettings-backend python3 qemu-user-static libvirt-daemon-system qemu-system qemu-user
+```
+
+> [!NOTE]
+> Right after installing all dependencies, ensure the `libvirtd` daemon is running; if not, you need to reboot your system
 
 ## Optional software
 
