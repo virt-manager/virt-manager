@@ -759,7 +759,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --console pty,target_type=virtio
 
 
---hostdev net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off,acpi.nodeset=0,2
+--hostdev net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off
 --host-device usb_device_781_5151_2004453082054CA1BEEE
 --host-device 001.003
 --hostdev 15:0.1
@@ -767,7 +767,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev 0:15:0.3,address.type=pci,address.zpci.uid=0xffff,address.zpci.fid=0xffffffff
 --host-device 0x062a:0x0001,driver_name=vfio
 --host-device 0483:2016
---host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on,acpi.nodeset=0-2
+--host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on
 --hostdev usb_5_20 --hostdev usb_5_21
 --hostdev wlan0,type=net
 --hostdev /dev/vdz,type=storage
@@ -887,6 +887,14 @@ c.add_compare(
     """,
     "iommufd",
     prerun_check="12.1.0",
+)
+
+c.add_compare(
+    """
+--hostdev 0:15:0.4,acpi.nodeset=0,2
+    """,
+    "acpi-nodeset",
+    prerun_check="11.8.0",
 )
 
 # Need to extract from the many-devices test as it was fixed in libvirt 10.4.0
