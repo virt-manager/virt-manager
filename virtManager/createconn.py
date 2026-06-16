@@ -37,6 +37,9 @@ def _default_uri():  # pragma: no cover
         "/usr/lib64/libvirt/libvirt_lxc"
     ):
         return "lxc:///"
+
+    if os.path.exists("/usr/sbin/bhyve"):
+        return "bhyve:///system"
     return None
 
 
@@ -147,6 +150,8 @@ class vmmCreateConn(vmmGObjectUI):
             uiutil.set_list_selection(self.widget("hypervisor"), HV_QEMU)
         elif default.startswith("xen"):  # pragma: no cover
             uiutil.set_list_selection(self.widget("hypervisor"), HV_XEN)
+        elif default.startswith("bhyve"):
+            uiutil.set_list_selection(self.widget("hypervisor"), HV_BHYVE)
 
     def hostname_changed(self, src_ignore):
         self.populate_uri()
