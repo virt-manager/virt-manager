@@ -122,6 +122,17 @@ def no_osinfo_unattended_win_drivers_cb():
     if "http://pcisig.com/pci/1af4/1005" not in devids:
         return "osinfo is too old for this win7 unattended test"
 
+    # 2026 RHEL virtio-win is busted, referencing win7 drivers
+    # that don't exist. Try to catch that case.
+    for arch in ["x86_64", "i686"]:
+        locations = win7.get_pre_installable_drivers_location(arch)
+        for loc in locations:
+            if not loc.startswith("file://"):
+                continue
+            path = loc[len("file://") :]
+            if not os.path.exists(path):
+                return "virtio-win package is referencing missing file: %s" % path
+
 
 def no_osinfo_linux2020_virtio():
     linux2020 = OSDB.lookup_os("linux2020")
@@ -1404,7 +1415,9 @@ c.add_compare(
     "reinstall-location",
 )  # compare --reinstall with --location
 c.add_compare(
-    "--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended", "reinstall-cdrom"
+    "--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended",
+    "reinstall-cdrom",
+    prerun_check=no_osinfo_unattended_win_drivers_cb,
 )  # compare --reinstall with --cdrom handling
 c.add_invalid(
     "--reinstall test --cdrom %(ISO-WIN7)s", grep="already active"
@@ -1453,6 +1466,7 @@ c.add_compare(
 c.add_compare(
     "--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended",
     "unattended-remote-cdrom",
+    prerun_check=no_osinfo_unattended_win_drivers_cb,
 )
 c.add_valid(
     "--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'"
