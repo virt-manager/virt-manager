@@ -549,6 +549,11 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         slist = self.widget("snapshot-list")
         model = slist.get_model()
+
+        expanded_names = set()
+        if self._initial_populate:
+            slist.map_expanded_rows(lambda _tv, path: expanded_names.add(model[path][0]))
+
         model.clear()
 
         try:
@@ -578,7 +583,20 @@ class vmmSnapshotPage(vmmGObjectUI):
                 [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()],
             )
 
-        slist.expand_all()
+        if not self._initial_populate:
+            slist.expand_all()
+        else:
+            current_snap = self.vm.get_current_snapshot()
+            if current_snap:
+                current_iter = parent_iters.get(current_snap.get_name())
+                if current_iter is not None:
+                    slist.expand_to_path(model.get_path(current_iter))
+
+            def _expand_saved(treemodel, path, it):
+                if treemodel[it][0] in expanded_names:
+                    slist.expand_row(path, False)
+
+            model.foreach(_expand_saved)
 
         def check_selection(treemodel, path, it, snaps):
             if select_name:
