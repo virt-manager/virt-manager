@@ -2594,12 +2594,20 @@ c.add_valid(
     + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off"
 )  # Skip existing file check
 c.add_valid(
-    "-n clonetest " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11:11:11:11 --check all=off"
+    "--connect %(URI-KVM-X86)s -o test-clone --auto-clone --mac 22:22:33:12:34:AB --mac 22:11:11:11:11:12 --check all=off"
 )  # Colliding mac but we skip the check
 c.add_invalid(
-    "-n clonetest " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11:11:11:11",
+    "--connect %(URI-KVM-X86)s -o test-clone --auto-clone --mac 22:22:33:12:34:AB --mac 22:11:11:11:11:11",
     grep="--check mac_in_use=off",
 )  # Colliding mac should fail
+c.add_invalid(
+    "--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --file /dev/pool-logical/newclone1.img --file /pool-dir/newclone2.img --skip-copy=hdb --force-copy=sdb",
+    grep="does not match the number of network interfaces",
+)  # Too few MACs: test-clone has 2 interfaces but only 1 MAC provided
+c.add_invalid(
+    "--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --mac 12:34:56:1A:B8:C3 --file /dev/pool-logical/newclone1.img --file /pool-dir/newclone2.img --skip-copy=hdb --force-copy=sdb",
+    grep="does not match the number of network interfaces",
+)  # Too many MACs: test-clone has 2 interfaces but 3 MACs provided
 c.add_invalid("--auto-clone", grep="An original machine name is required")  # No clone VM specified
 c.add_invalid(
     _CLONE_EMPTY + " --file foo", grep="use '--name NEW_VM_NAME'"
