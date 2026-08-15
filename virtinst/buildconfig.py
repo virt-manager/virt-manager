@@ -12,8 +12,8 @@ Configuration variables that can be set at build time
 import os
 import sys
 
-if sys.version_info.major != 3 or sys.version_info.minor < 4:  # pragma: no cover
-    print("python 3.4 or later is required, your's is %s" % sys.version_info)
+if sys.version_info.major != 3 or sys.version_info.minor < 9:  # pragma: no cover
+    print("python 3.9 or later is required, your's is %s" % sys.version_info)
     sys.exit(1)
 
 import configparser

@@ -23,7 +23,7 @@ A detailed dependency list can be found in [virt-manager.spec.in](virt-manager.s
 Minimum version requirements of major components:
 
    - gettext >= 0.19.6
-   - python >= 3.4
+   - python >= 3.9
    - gtk3 >= 3.22
    - libvirt-python >= 0.6.0
    - pygobject3 >= 3.31.3
