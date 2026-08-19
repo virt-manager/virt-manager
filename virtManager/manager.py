@@ -348,6 +348,7 @@ class vmmManager(vmmGObjectUI):
         vmlist.set_model(model)
         vmlist.set_tooltip_column(ROW_HINT)
         vmlist.set_headers_visible(True)
+        vmlist.set_enable_tree_lines(True)
 
         nameCol = Gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
