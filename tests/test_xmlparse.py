@@ -1239,3 +1239,93 @@ def testConvertToVNC():
     _test("convert-to-vnc-spice-devices")
     _test("convert-to-vnc-spice-manyopts", qemu_vdagent=True)
     _test("convert-to-vnc-has-vnc", qemu_vdagent=True)
+
+
+def testGraphicsDBusXML():
+    conn = utils.URIs.open_testdefault_cached()
+    dev = virtinst.DeviceGraphics(conn)
+
+    dev.type = "dbus"
+    dev.p2p = True
+    dev.dbus_address = "unix:path=/tmp/qemu-dbus-display"
+    dev.audio_id = 7
+    dev.gl = True
+    dev.rendernode = "/dev/dri/renderD128"
+
+    expected = """
+<graphics type="dbus" p2p="yes" address="unix:path=/tmp/qemu-dbus-display">
+  <gl enable="yes" rendernode="/dev/dri/renderD128"/>
+  <audio id="7"/>
+</graphics>
+""".strip()
+    assert _sanitize_file_xml(dev.get_xml()).strip() == expected
+
+    dev.port = 6001
+    dev.listen = "127.0.0.1"
+    dev.passwd = "secret"
+    dev.type = "dbus"
+    assert dev.port is None
+    assert dev.listen is None
+    assert dev.passwd is None
+
+    dev.type = "vnc"
+    assert dev.p2p is None
+    assert dev.dbus_address is None
+    assert dev.audio_id is None
+
+
+def testChangeGraphicsClearsSpiceAudioRefs():
+    conn = utils.URIs.open_testdefault_cached()
+    xml = """
+<domain type='kvm'>
+  <name>dbus-audio-cleanup</name>
+  <memory unit='KiB'>1048576</memory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='x86_64'>hvm</type>
+  </os>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <graphics type='spice' autoport='yes'/>
+    <audio id='1' type='spice'/>
+    <sound model='ich9'>
+      <audio id='1'/>
+    </sound>
+  </devices>
+</domain>
+""".strip()
+    guest = virtinst.Guest(conn, xml)
+
+    gfx = guest.devices.graphics[0]
+    guest.change_graphics("dbus", gfx)
+
+    assert guest.devices.audio[0].type == "dbus"
+    assert str(gfx.audio_id) == guest.devices.audio[0].id
+    assert str(guest.devices.sound[0].audio_id) == guest.devices.audio[0].id
+
+
+def testChangeGraphicsAddsDBusAudioBackend():
+    conn = utils.URIs.open_testdefault_cached()
+    xml = """
+<domain type='kvm'>
+  <name>dbus-audio-backend</name>
+  <memory unit='KiB'>1048576</memory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='x86_64'>hvm</type>
+  </os>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <graphics type='spice' autoport='yes'/>
+    <sound model='virtio'/>
+  </devices>
+</domain>
+""".strip()
+    guest = virtinst.Guest(conn, xml)
+
+    gfx = guest.devices.graphics[0]
+    guest.change_graphics("dbus", gfx)
+
+    assert guest.devices.audio[0].type == "dbus"
+    assert str(gfx.audio_id) == guest.devices.audio[0].id
+    assert str(guest.devices.sound[0].audio_id) == guest.devices.audio[0].id

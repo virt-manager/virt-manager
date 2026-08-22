@@ -892,7 +892,7 @@ class vmmDomain(vmmLibvirtObject):
         if passwd != _SENTINEL:
             editdev.passwd = passwd
         if gtype != _SENTINEL:
-            editdev.type = gtype
+            xmlobj.change_graphics(gtype, editdev)
         if gl != _SENTINEL:
             editdev.gl = gl
         if rendernode != _SENTINEL:

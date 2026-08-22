@@ -2378,6 +2378,7 @@ c.add_compare(
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
 c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics")
 c.add_compare("--graphics listen=none", "edit-graphics-listen-none")
+c.add_compare("--graphics type=dbus,gl=on", "edit-graphics-dbus")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
@@ -2476,6 +2477,7 @@ c.add_compare(
 
 c = vixml.add_category("edit/remove spice graphics", "test-spice --print-diff --define")
 c.add_compare("--edit --graphics type=vnc", "change-spice-to-vnc")
+c.add_compare("--edit --graphics type=dbus", "change-spice-to-dbus")
 c.add_compare("--remove-device --graphics type=spice", "remove-spice-graphics")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
