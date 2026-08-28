@@ -97,7 +97,8 @@ def _convert_qname(tag, namespaces):
         uri, tag = tag[1:].rsplit("}", 1)
         for key, val in namespaces.items():
             if uri == val:
-                tag = key + ":" + tag
+                if key:
+                    tag = key + ":" + tag
                 break
     return tag
 
@@ -120,7 +121,10 @@ def _serialize_node(write, elem, namespaces):
         else:
             write("<" + tag)
             for nsprefix, nsuri in elem.virtinst_namespaces.items():
-                write(' xmlns:%s="%s"' % (nsprefix, nsuri))
+                if nsprefix:
+                    write(' xmlns:%s="%s"' % (nsprefix, nsuri))
+                else:
+                    write(' xmlns="%s"' % nsuri)
             for k, v in list(elem.items()):
                 k = _convert_qname(k, use_ns)
                 v = xmlutil.xml_escape(v)
