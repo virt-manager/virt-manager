@@ -10,8 +10,8 @@ import io
 import os
 
 from gi.repository import GdkPixbuf
+from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from virtinst import DomainSnapshot
 from virtinst import generatename
@@ -464,11 +464,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-description").set_buffer(buf)
 
         # [name, row label, tooltip, icon name, sortname, current]
-        model = Gtk.ListStore(str, str, str, str, str, bool)
+        model = Gtk.TreeStore(str, str, str, str, str, bool)
         model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
+        col.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         col.set_spacing(6)
 
         img = Gtk.CellRendererPixbuf()
@@ -477,7 +478,6 @@ class vmmSnapshotPage(vmmGObjectUI):
         col.add_attribute(img, "icon-name", 3)
 
         txt = Gtk.CellRendererText()
-        txt.set_property("ellipsize", Pango.EllipsizeMode.END)
         col.pack_start(txt, False)
         col.add_attribute(txt, "markup", 1)
 
@@ -488,14 +488,10 @@ class vmmSnapshotPage(vmmGObjectUI):
         col.pack_start(img, False)
         col.add_attribute(img, "visible", 5)
 
-        def _sep_cb(_model, _iter, ignore):
-            return not bool(_model[_iter][0])
-
         slist = self.widget("snapshot-list")
         slist.set_model(model)
         slist.set_tooltip_column(2)
         slist.append_column(col)
-        slist.set_row_separator_func(_sep_cb, None)
 
         # Snapshot popup menu
         menu = Gtk.Menu()
@@ -551,7 +547,13 @@ class vmmSnapshotPage(vmmGObjectUI):
         for i in self._get_selected_snapshots():
             cursnaps.append(i.get_name())
 
-        model = self.widget("snapshot-list").get_model()
+        slist = self.widget("snapshot-list")
+        model = slist.get_model()
+
+        expanded_names = set()
+        if self._initial_populate:
+            slist.map_expanded_rows(lambda _tv, path: expanded_names.add(model[path][0]))
+
         model.clear()
 
         try:
@@ -561,28 +563,40 @@ class vmmSnapshotPage(vmmGObjectUI):
             self._set_error_page(_("Error refreshing snapshot list: %s") % str(e))
             return
 
-        has_external = False
-        has_internal = False
-        for snap in snapshots:
-            desc = snap.get_xmlobj().description
-            name = snap.get_name()
-            state = snap.run_status()
-            if snap.is_external():
-                has_external = True
-                sortname = "3%s" % name
-                label = _("%(vm)s\n<span size='small'>VM State: %(state)s (External)</span>")
-            else:
-                has_internal = True
-                sortname = "1%s" % name
-                label = _("%(vm)s\n<span size='small'>VM State: %(state)s</span>")
+        snapshots.sort(key=lambda s: s.get_xmlobj().creationTime or 0)
 
-            label = label % {"vm": xmlutil.xml_escape(name), "state": xmlutil.xml_escape(state)}
-            model.append(
-                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()]
+        parent_iters = {}
+        for snap in snapshots:
+            name = snap.get_name()
+            xmlobj = snap.get_xmlobj()
+            desc = xmlobj.description
+            state = snap.run_status()
+            sortname = "%010d%s" % (xmlobj.creationTime or 0, name)
+            snap_type = _("External") if snap.is_external() else _("Internal")
+            label = _("%(vm)s\n<span size='small'>VM State: %(state)s (%(snap_type)s)</span>") % {
+                "vm": xmlutil.xml_escape(name),
+                "state": xmlutil.xml_escape(state),
+                "snap_type": snap_type,
+            }
+            parent_iters[name] = model.append(
+                parent_iters.get(xmlobj.parent),
+                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()],
             )
 
-        if has_internal and has_external:
-            model.append([None, None, None, None, "2", False])
+        if not self._initial_populate:
+            slist.expand_all()
+        else:
+            current_snap = self.vm.get_current_snapshot()
+            if current_snap:
+                current_iter = parent_iters.get(current_snap.get_name())
+                if current_iter is not None:
+                    slist.expand_to_path(model.get_path(current_iter))
+
+            def _expand_saved(treemodel, path, it):
+                if treemodel[it][0] in expanded_names:
+                    slist.expand_row(path, False)
+
+            model.foreach(_expand_saved)
 
         def check_selection(treemodel, path, it, snaps):
             if select_name:
@@ -591,11 +605,20 @@ class vmmSnapshotPage(vmmGObjectUI):
             elif treemodel[it][0] in snaps:
                 selection.select_path(path)
 
-        selection = self.widget("snapshot-list").get_selection()
-        model = self.widget("snapshot-list").get_model()
+        selection = slist.get_selection()
         selection.unselect_all()
         model.foreach(check_selection, cursnaps)
 
+        if not self._initial_populate:
+
+            def _on_first_allocate(widget, allocation):
+                if allocation.width <= 1:
+                    return
+                widget.disconnect_by_func(_on_first_allocate)
+                pos = min(slist.get_preferred_width()[1], allocation.width // 2)
+                GLib.idle_add(widget.set_position, pos)
+
+            self.widget("snapshot-paned").connect("size-allocate", _on_first_allocate)
         self._initial_populate = True
 
     def _read_screenshot_file(self, name):
