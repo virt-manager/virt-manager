@@ -351,8 +351,8 @@ class vmmStatsManager(vmmGObject):
         curmem = 0
         try:
             stats = vm.get_backend().memoryStats()
-            totalmem = stats.get("actual", 1)
-            curmem = max(0, totalmem - stats.get("unused", totalmem))
+            totalmem = stats.get("actual", stats.get("available", 1))
+            curmem = max(0, stats.get("rss", totalmem - stats.get("unused", totalmem)))
         except libvirt.libvirtError as err:  # pragma: no cover
             if vm.conn.support.is_error_nosupport(err):
                 log.debug("conn does not support memoryStats")
@@ -388,7 +388,7 @@ class vmmStatsManager(vmmGObject):
         return currMemPercent, curmem
 
     ####################
-    # alltats handling #
+    # allstats handling #
     ####################
 
     def _get_all_stats(self, conn):
