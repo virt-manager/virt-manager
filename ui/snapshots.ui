@@ -19,7 +19,7 @@
           <object class="GtkPaned" id="spaned1">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="position">200</property>
+            <property name="position">400</property>
             <property name="position-set">True</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow7">
@@ -32,6 +32,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="headers-visible">False</property>
+                    <property name="enable-tree-lines">True</property>
                     <signal name="button-press-event" handler="on_snapshot_list_button_press_event" swapped="no"/>
                     <signal name="row-activated" handler="on_snapshot_list_row_activated" swapped="no"/>
                     <child internal-child="selection">
