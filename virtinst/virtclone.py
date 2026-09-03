@@ -26,6 +26,14 @@ def _process_macs(options, cloner):
     if not new_macs or new_macs[0] == "RANDOM":
         return
 
+    ninterfaces = len(cloner.new_guest.devices.interface)
+    if len(new_macs) != ninterfaces:
+        fail(
+            _("Number of MAC addresses (%d) does not match the number of "
+              "network interfaces in the original guest (%d).")
+            % (len(new_macs), ninterfaces)
+        )
+
     for mac in new_macs:
         cli.validate_mac(cloner.conn, mac)
 
