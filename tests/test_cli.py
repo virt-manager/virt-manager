@@ -1079,7 +1079,7 @@ c = vinst.add_category(
 )
 
 c.add_compare(
-    "--controller type=pci,index=1,model=pcie-expander-bus --controller type=pci,index=2,model=pcie-root-port,address.domain=0,address.bus=1,address.devno=0,address.function=0,address.type=pci --iommu model=smmuv3,driver.pciBus=0,driver.accel=on,driver.ats=on,driver.ril=on,driver.ssidSize=20,driver.oas=48 --iommu model=smmuv3,driver.pciBus=1,driver.accel=on,driver.ats=on,driver.ril=on,driver.ssidSize=20,driver.oas=48 --hostdev 0:0:4.0,type=pci,address.bus=2,address.devno=0,address.function=0,address.type=pci",
+    "--controller type=pci,index=1,model=pcie-expander-bus --controller type=pci,index=2,model=pcie-root-port,address.domain=0,address.bus=1,address.devno=0,address.function=0,address.type=pci --iommu model=smmuv3,driver.pciBus=0,driver.accel=on,driver.ats=on,driver.ril=on,driver.ssidsize=20,driver.oas=48 --iommu model=smmuv3,driver.pciBus=1,driver.accel=on,driver.ats=on,driver.ril=on,driver.ssidsize=20,driver.oas=48 --hostdev 0:0:4.0,type=pci,address.bus=2,address.devno=0,address.function=0,address.type=pci",
     "aarch64-nested-smmuv3",
     prerun_check="12.7.0",
 )
