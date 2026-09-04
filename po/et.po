@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager 5.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2026-04-19 02:58+0000\n"
+"PO-Revision-Date: 2026-08-27 07:18+0000\n"
 "Last-Translator: Priit Jõerüüt "
 "<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/virt-"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -1810,6 +1810,11 @@ msgid ""
 "will need\n"
 "identical CPUs in order to migrate the VM."
 msgstr ""
+"Protsessori vaikimisi seadistus uute virtuaalmasinate jaoks. See on "
+"tüüpiliselt kompromiss jõudluse\n"
+"ja ümberkolimise ühilduvuse vahel: kui kasutad „copy host“ valikut, siis "
+"sinu serverid vajavad\n"
+"virtuaalmasina ümberkolimiseks identset protsessorit."
 
 #: ui/preferences.ui:498
 msgid "CPU _default:"
@@ -3839,6 +3844,8 @@ msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
+"Kas oled kindel, et soovid käivitada „%(name)s“ hetktõmmise? Kõik ketastele "
+"peale viimase hetktõmmise tegemist tehtud muudatused lähevad kaotsi."
 
 #: virtManager/details/snapshots.py:775
 #, python-format
@@ -3846,6 +3853,9 @@ msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
+"Kas oled kindel, et soovid käivitada „%(name)s“ hetktõmmise? Kõik ketastele "
+"ja seadistustes peale viimase hetktõmmise tegemist tehtud muudatused lähevad "
+"kaotsi."
 
 #: virtManager/details/snapshots.py:787
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -4114,7 +4124,7 @@ msgstr "Ära küsi minult enam uuesti"
 #: virtManager/host.py:31
 #, python-format
 msgid "Error launching host dialog: %s"
-msgstr ""
+msgstr "Alussüsteemi vaate käivitamine ei õnnestunud: %s"
 
 #: virtManager/host.py:165
 #, python-format
@@ -4333,6 +4343,9 @@ msgid ""
 "-X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
+"Kohaliku sessiooni tuvastamine ei õnnestu: kui oled käivitanud virt-manageri "
+"üle ssh -X või VNC, siis ei pruugi olla võimalik ühendada libvirtiga "
+"tavakasutajana. Proovi käivitada juurkasutajana."
 
 #: virtManager/lib/connectauth.py:189
 msgid "Verify that an appropriate libvirt daemon is running."
@@ -5118,6 +5131,8 @@ msgstr "Näiteid ja täismahus valikute süntaksi leiad abiteabe (man) lehelt."
 #: virtinst/cli.py:118
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
+"Kasutatavate alamvalikute nägemiseks kasuta „--option=?“ või „--option help“ "
+"võtmeid"
 
 #: virtinst/cli.py:295
 #, python-format
@@ -5142,27 +5157,29 @@ msgstr ""
 #: virtinst/cli.py:329
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
-msgstr ""
+msgstr " (Sürjutamiseks kasuta --check %s=off või --check all=off)"
 
 #: virtinst/cli.py:360
 #, python-format
 msgid "This will overwrite the existing path '%s'"
-msgstr ""
+msgstr "Järgnevaga asendad olemasoleva asukoha „%s“"
 
 #: virtinst/cli.py:370
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr ""
+"Ketas asukohaga „%(path)s“ on juba kasutusel „%(names)s“ külalissüsteemi "
+"jaoks."
 
 #: virtinst/cli.py:414
 #, python-format
 msgid "Running graphical console command: %(command)s"
-msgstr ""
+msgstr "Käivitan graafilise konsooli käsku: %(command)s"
 
 #: virtinst/cli.py:426
 #, python-format
 msgid "Running text console command: %(command)s"
-msgstr ""
+msgstr "Käivitan tekstikonsooli käsku: %(command)s"
 
 #: virtinst/cli.py:470
 #, python-format
@@ -5178,7 +5195,7 @@ msgstr "„%(option1)s“ ja „%(option2)s“ valikuid ei saa kasutada samaaegs
 
 #: virtinst/cli.py:608 virtinst/cli.py:612
 msgid "Connect to hypervisor with libvirt URI"
-msgstr ""
+msgstr "Ühenda hüperviisoriga libvirti URI abil"
 
 #: virtinst/cli.py:635
 msgid ""
@@ -5187,22 +5204,28 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
+"Seadista külaliskonsooli automaatne ühendamine. Näiteks:\n"
+"--autoconsole text\n"
+"--autoconsole graphical\n"
+"--autoconsole none"
 
 #: virtinst/cli.py:646
 msgid "Don't automatically try to connect to the guest console"
-msgstr ""
+msgstr "Ära proovi automaatselt ühendada külalissüsteemi konsooliga"
 
 #: virtinst/cli.py:651
 msgid "Don't boot guest after completing install."
-msgstr ""
+msgstr "Peale paigaldust ära käivita külalissüsteemi."
 
 #: virtinst/cli.py:658
 msgid "Don't check name collision, overwrite any guest with the same name."
-msgstr ""
+msgstr "Ära kontrolli sama nime olemasolu, lihtsalt kirjuta ta üle."
 
 #: virtinst/cli.py:665
 msgid "Print the generated domain XML rather than create the guest."
 msgstr ""
+"Külalissüsteemi loomise asemel prindi loodud domeeni definitsioon XML-"
+"koodina."
 
 #: virtinst/cli.py:685
 msgid ""
@@ -5329,11 +5352,12 @@ msgstr "Seadista rööpühendusega külalisseadet"
 
 #: virtinst/cli.py:814
 msgid "Configure a guest communication channel"
-msgstr ""
+msgstr "Seadista külalissüsteemi suthluskanal"
 
 #: virtinst/cli.py:820
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
+"Seadista alussõsteemi ja külalissüsteemi vaheline tekstikonsooli ühendus"
 
 #: virtinst/cli.py:826
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
@@ -5348,7 +5372,7 @@ msgstr ""
 
 #: virtinst/cli.py:846
 msgid "Configure guest sound device emulation"
-msgstr ""
+msgstr "Seadista külalissüsteemi heliseadme emulatsioon"
 
 #: virtinst/cli.py:856
 msgid "Configure host audio backend for sound devices"
@@ -5360,55 +5384,71 @@ msgstr "Seadista külalissüsteemi valvetaimeri (watchdog) seade"
 
 #: virtinst/cli.py:862
 msgid "Configure guest video hardware."
-msgstr ""
+msgstr "Seadista külalissüsteemi graafikaraudvara."
 
 #: virtinst/cli.py:867
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
+"Seadista külalissüsteemi kiipkaardi seade. Nt:\n"
+"--smartcard mode=passthrough"
 
 #: virtinst/cli.py:874
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
+"Seadista külalissüsteemi edasisuunamisseade. Nt::\n"
+"--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: virtinst/cli.py:882
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
+"Seadista külalissüsteemi „memballoon“ seade. Nt:\n"
+"--memballoon model=virtio"
 
 #: virtinst/cli.py:886
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
+"Seadista külalissüsteemi TPM-seade. Nt:\n"
+"--tpm /dev/tpm"
 
 #: virtinst/cli.py:890
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
+"Seadista külalissüsteemi juhuslike numbrite genereerimise seade. Nt:\n"
+"--rng /dev/urandom"
 
 #: virtinst/cli.py:896
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
+"Seadista külalissüsteemi paanikaseade. Nt:\n"
+"--panic default"
 
 #: virtinst/cli.py:902
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
+"Seadista külalissüsteemi jagatud mäluseade. Nt::\n"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:908
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
+"Seadista külalissüsteemi mäluseade. Nt::\n"
+"--memdev dimm,target.size=1024"
 
 #: virtinst/cli.py:914
 msgid ""
@@ -5416,12 +5456,17 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
+"Seadista külalissüsteemi vsocki soklid. Nt::\n"
+"--vsock cid.auto=yes\n"
+"--vsock cid.address=7"
 
 #: virtinst/cli.py:920
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
+"Seadista IOMMU seade. Nt:\n"
+"--iommu model=intel,driver.aw_bits=48"
 
 #: virtinst/cli.py:927
 msgid ""
@@ -5429,14 +5474,18 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Seadista nvramipõhine anmderuumiseade.\n"
+"Kokkujooksmise logide salvestamine peaks olema külalissüsteemi kerneli "
+"ülesanne. Nt:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr ""
+msgstr "Määratle domeeni <iothreads> ja <iothreadids> seadistusi."
 
 #: virtinst/cli.py:944
 msgid "Set domain seclabel configuration."
-msgstr ""
+msgstr "Määratle domeeni „seclabel“ seadistust."
 
 #: virtinst/cli.py:951
 msgid "Set guest to perform the S390 cryptographic key management operations."
@@ -5444,19 +5493,19 @@ msgstr ""
 
 #: virtinst/cli.py:956
 msgid "Tune CPU parameters for the domain process."
-msgstr ""
+msgstr "Kohenda domeeniprotsessi protsessori parameetreid."
 
 #: virtinst/cli.py:961
 msgid "Tune NUMA policy for the domain process."
-msgstr ""
+msgstr "Kohenda domeeniprotsessi NUMA-reegleid."
 
 #: virtinst/cli.py:966
 msgid "Tune memory policy for the domain process."
-msgstr ""
+msgstr "Kohenda domeeniprotsessi mälukasutuse reegleid."
 
 #: virtinst/cli.py:971
 msgid "Tune blkio policy for the domain process."
-msgstr ""
+msgstr "Kohenda domeeniprotsessi blkio reegleid."
 
 #: virtinst/cli.py:979
 msgid ""
@@ -5470,12 +5519,17 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
+"Võid seadistada domeeni <omadusi> XML-is. Nt:\n"
+"--features acpi=off\n"
+"--features apic=on,apic.eoi=on"
 
 #: virtinst/cli.py:998
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
+"Võid seadistada domeeni <kella> XML-is. Nt:\n"
+"--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: virtinst/cli.py:1002
 msgid "Configure VM power management features"
@@ -5495,6 +5549,9 @@ msgid ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
+"Seadista SMBIOS-i süsteemiteavet. Nt:\n"
+"--sysinfo host\n"
+"--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 
 #: virtinst/cli.py:1030
 msgid ""
@@ -5502,12 +5559,17 @@ msgid ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
+"Edasta argumendid otse QEMU emulaatorile. Nt:\n"
+"--qemu-commandline='-display gtk,gl=on'\n"
+"--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:1042
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
+"Seadista virtuaalmasina turvareegleid (nt. SEV-põhine mälu krüptimine). Nt:\n"
+"--launchSecurity sev"
 
 #: virtinst/cli.py:1054
 msgid ""
@@ -5515,12 +5577,17 @@ msgid ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
+"Määratle külalissüsteemi alglaadimise seadistused. Nt:\n"
+"--boot hd,cdrom,menu=on\n"
+"--boot init=/sbin/init (konteinerite jaoks)"
 
 #: virtinst/cli.py:1065
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
+"Lülita sisse kasutajakohane nimeruum LXC konteineri jaoks. Nt:\n"
+"--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: virtinst/cli.py:1080
 msgid ""
@@ -5530,6 +5597,11 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
+"Võid määratleda andmeruumi erinevate valikutega. Nt:\n"
+"--disk size=10 (uus 10GiB tõmmis vaikimisi asukohas)\n"
+"--disk /my/existing/disk,cache=none\n"
+"--disk device=cdrom,bus=scsi\n"
+"--disk=?"
 
 #: virtinst/cli.py:1091
 msgid "OS options"
@@ -5573,7 +5645,7 @@ msgstr ""
 #: virtinst/cli.py:1673
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
-msgstr ""
+msgstr "„%(optionflag)s“ valiku tundmatu väärtus: „%(string)s“"
 
 #: virtinst/cli.py:1729 virtinst/cli.py:1760
 #, python-format
@@ -5589,6 +5661,8 @@ msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
+"Graafilise konsooliga ühendamine ei õnnestu: virt-viewer on paigaldamata. "
+"Palun paigalda pakett „virt-viewer“."
 
 #: virtinst/cli.py:2213
 #, python-format
@@ -5609,7 +5683,7 @@ msgstr "„size“ suuruse väärtus pole sobilik: %s"
 #: virtinst/cli.py:3928
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
-msgstr ""
+msgstr "„%(optionname)s“ valiku tundmatu väärtus „%(string)s“"
 
 #: virtinst/cli.py:3944
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -5620,17 +5694,17 @@ msgstr ""
 #: virtinst/cli.py:4470
 #, python-format
 msgid "Expected PCI format string for '%s'"
-msgstr ""
+msgstr "Eeldatav PCI vormingu sõne „%s“ jaoks"
 
 #: virtinst/cli.py:5229
 #, python-format
 msgid "%s corresponds to multiple node devices"
-msgstr ""
+msgstr "%s vastab mitmele seadmesõlmele"
 
 #: virtinst/cli.py:5231
 #, python-format
 msgid "Did not find a matching node device for '%s'"
-msgstr ""
+msgstr "„%s“ jaoks ei leidu vastavat seadmesõlme"
 
 #: virtinst/cli.py:5378
 msgid ""
@@ -5638,6 +5712,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Täiendavat teavet näed käsuga:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:46
 #, python-format
@@ -5652,7 +5729,7 @@ msgstr "„%s“ domeeni ei leidu."
 #: virtinst/cloner.py:161
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
-msgstr ""
+msgstr "Kloonimine olemasolevale andmeruumi köitele pole hetkel toetatud: „%s“"
 
 #: virtinst/cloner.py:182
 #, python-format
@@ -5703,7 +5780,7 @@ msgstr "Külalissüsteemi vigane nimi: %s"
 #: virtinst/devices/disk.py:394
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
-msgstr ""
+msgstr "Olematu „%s“ köite jaoks pead määratlema suuruse"
 
 #: virtinst/devices/disk.py:400
 #, python-format
@@ -5714,7 +5791,7 @@ msgstr ""
 
 #: virtinst/devices/disk.py:425
 msgid "Format attribute not supported for this volume type"
-msgstr ""
+msgstr "Vormingu atribuut pole selle köite tüübi puhul toetatud"
 
 #: virtinst/devices/disk.py:861
 #, python-format
@@ -5730,18 +5807,20 @@ msgstr ""
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "„%(bus)s“ siini puhul on toetatud vaid %(number)s ketas"
+msgstr[1] "„%(bus)s“ siini puhul on toetatud vaid %(number)s ketast"
 
 #: virtinst/devices/filesystem.py:127
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
-msgstr ""
+msgstr "Failisüsteemi sihtkaust „%s“ peab olema absoluutne asukoht"
 
 #: virtinst/devices/graphics.py:20
 #, python-format
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr ""
+"%s peab olema suurem, kui 5900 või kasuta automaatseks väärtustamiseks -1 "
+"väärtust"
 
 #: virtinst/devices/hostdev.py:87
 #, python-format
@@ -5756,17 +5835,17 @@ msgstr ""
 #: virtinst/devices/interface.py:218
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
-msgstr ""
+msgstr "„%s“ MAC-aadress on kasutusel teise virtuaalmasina jaoks."
 
 #: virtinst/diskbackend.py:108
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
-msgstr ""
+msgstr "„%(path)s“ andmeruumi pole võimalik kasutada: %(err)s"
 
 #: virtinst/diskbackend.py:284
 #, python-format
 msgid "Permissions on '%s' did not stick"
-msgstr ""
+msgstr "„%s“ õigused polnud püsivad"
 
 #: virtinst/diskbackend.py:558
 msgid ""
@@ -6165,7 +6244,7 @@ msgstr "Andmeruumi seadistus"
 
 #: virtinst/virtclone.py:97
 msgid "New file to use as the disk image for the new guest"
-msgstr ""
+msgstr "Uus fail, mida kasutada kettatõmmisena uue külalissüsteemi jaoks"
 
 #: virtinst/virtclone.py:103
 msgid ""
@@ -6203,6 +6282,8 @@ msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
+"Uus fikseeritud MAC-aadress kloonitava külalissüsteemi jaoks. Vaikimisi "
+"luuakse MAC-aadress juhuslikult"
 
 #: virtinst/virtclone.py:146 virtinst/virtinstall.py:1187
 #: virtinst/virtxml.py:567
@@ -6214,12 +6295,15 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
+"Nõutav on kas „--auto-clone“ või „--file“ - palun kasuta kas „--auto-clone“ "
+"või „--file“ seadistust ja proovi uuesti."
 
 #: virtinst/virtclone.py:215
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
 msgstr ""
+"Uus virtuaalmasin vajab nime, selleks kasuta „--name UUE_VM_NIMI“ argumenti."
 
 #: virtinst/virtclone.py:234
 #, python-format
@@ -6239,6 +6323,7 @@ msgstr ""
 #: virtinst/virtinstall.py:128
 msgid "Cannot specify storage and use --nodisks"
 msgstr ""
+"Korraga pole võimalik määratleda andmeruumi ja lisada „--nodisks“ argumenti"
 
 #: virtinst/virtinstall.py:133
 msgid ""
@@ -6249,10 +6334,14 @@ msgstr ""
 #: virtinst/virtinstall.py:154
 msgid "--os-type is deprecated and does nothing. Please stop using it."
 msgstr ""
+"„--os-type“ argument pole enam kasutusel ja ei tee mitte midagi. Palun "
+"lõpeta selle kasutamine."
 
 #: virtinst/virtinstall.py:229
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr ""
+"Sa ei saa korraga kasutada „--graphics“ argumenti ja vanas stiilis "
+"graafikavalikuid"
 
 #: virtinst/virtinstall.py:233
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
@@ -6260,11 +6349,11 @@ msgstr ""
 
 #: virtinst/virtinstall.py:315
 msgid "--memory amount in MiB is required"
-msgstr ""
+msgstr "„--memory“ eeldab, et MiB vormis andmemaht on lisatud"
 
 #: virtinst/virtinstall.py:318
 msgid "--disk storage must be specified (override with --disk none)"
-msgstr ""
+msgstr "„--disk“ peab olema määratletud (sürjutamiseks kasuta „--disk none“)"
 
 #: virtinst/virtinstall.py:322
 #, python-format
@@ -6272,6 +6361,8 @@ msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
 msgstr ""
+"Paigaldusmeetod peab olema määratletud\n"
+"(%(methods)s)"
 
 #: virtinst/virtinstall.py:336
 msgid ""
@@ -6298,7 +6389,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:380
 msgid "The guest's network configuration may not support PXE"
-msgstr ""
+msgstr "Külalissüsteemi võrguseadistusel ilmselt puudub PXE tugu"
 
 #: virtinst/virtinstall.py:385
 #, python-brace-format
@@ -6376,6 +6467,9 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Täismahus operatsioonisüsteemide valikute väärtusi näed käsuga:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:622
 #, python-brace-format
@@ -6383,6 +6477,9 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Kui sinu Linuxi distributsiooni loendis ei leidu, siis kasuta mõnda üldist "
+"väärtust\n"
+"nagu näiteks: {oslist}\n"
 
 #: virtinst/virtinstall.py:629
 #, python-brace-format
@@ -6426,7 +6523,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:823
 msgid "Console command returned failure."
-msgstr ""
+msgstr "Konsoolilt antud käsu vastsueks oli viga."
 
 #: virtinst/virtinstall.py:862
 msgid "Domain has crashed."
@@ -6451,7 +6548,7 @@ msgstr "Domeen on seiskunud. Jätkan."
 
 #: virtinst/virtinstall.py:919
 msgid "Installation has exceeded specified time limit. Exiting application."
-msgstr ""
+msgstr "Paigalduse kestus on ületanud etteantud ajapiiri. Rakendus lõpetab töö."
 
 #: virtinst/virtinstall.py:941
 msgid "Domain creation completed."
@@ -6463,10 +6560,12 @@ msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
+"Sa võid oma domeeni uuesti käivitada käsuga:\n"
+"  %s"
 
 #: virtinst/virtinstall.py:955
 msgid "User stopped the VM. Not rebooting."
-msgstr ""
+msgstr "Kasuta lõpetas virtuaalmasina töö. Ei käivita uuesti."
 
 #: virtinst/virtinstall.py:958
 msgid "Restarting guest."
@@ -6486,7 +6585,7 @@ msgstr "Domeeni paigaldamine katkes."
 
 #: virtinst/virtinstall.py:1023
 msgid "Dry run completed successfully"
-msgstr ""
+msgstr "Proovikäivitus lõppes edukalt"
 
 #: virtinst/virtinstall.py:1027
 #, python-format
@@ -6499,11 +6598,11 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1051
 msgid "Create a new virtual machine from specified install media."
-msgstr ""
+msgstr "Loo määratletud paigaldusmeediumi abil uus virtuaalmasin."
 
 #: virtinst/virtinstall.py:1057
 msgid "Name of the guest instance"
-msgstr ""
+msgstr "Külalissüsteemi paigalduse nimi"
 
 #: virtinst/virtinstall.py:1065
 msgid "Installation Method Options"
@@ -6518,14 +6617,16 @@ msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
+"Distributsiooni paigalduse võrguaadress, nt. https://server/asukoht. "
+"Distributsioonikohaseid näiteid leiad abiteavest (man-lehtedelt)."
 
 #: virtinst/virtinstall.py:1077
 msgid "Boot from the network using the PXE protocol"
-msgstr ""
+msgstr "Alglaadi võrgust kasutades PXE-protokolli"
 
 #: virtinst/virtinstall.py:1083
 msgid "Build guest around an existing disk image"
-msgstr ""
+msgstr "Loo külalissüsteem olemaoleva kettatõmmise alusel"
 
 #: virtinst/virtinstall.py:1090
 msgid ""
@@ -6538,7 +6639,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1098
 msgid "Perform an unattended installation"
-msgstr ""
+msgstr "Paigalda järelvalveta"
 
 #: virtinst/virtinstall.py:1100
 msgid "Specify fine grained install options"
@@ -6584,19 +6685,19 @@ msgstr "Kasutatava hüperviisori nimi (kvm, qemu, xen, ...)"
 
 #: virtinst/virtinstall.py:1181
 msgid "The CPU architecture to simulate"
-msgstr ""
+msgstr "Simuleeritav protsessoriarhitektiuur"
 
 #: virtinst/virtinstall.py:1182
 msgid "The machine type to emulate"
-msgstr ""
+msgstr "Emuleeritav masinatüüp"
 
 #: virtinst/virtinstall.py:1192
 msgid "Have domain autostart on host boot up."
-msgstr ""
+msgstr "Luba domeeni automaatset käivitamist alussüsteemi käivitamise järel."
 
 #: virtinst/virtinstall.py:1195
 msgid "Create a transient domain."
-msgstr ""
+msgstr "Loo ajutine domeen."
 
 #: virtinst/virtinstall.py:1201
 msgid "Force power off the domain when the console viewer is closed."
@@ -6604,48 +6705,50 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1204
 msgid "Minutes to wait for install to complete."
-msgstr ""
+msgstr "Minuteid ootamaks paigalduse lõppemist."
 
 #: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
-msgstr ""
+msgstr "Palun sisesta „yes“ või „no“."
 
 #: virtinst/virtxml.py:105
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr ""
+msgstr "--osinfo/--os-variant pole toetatud, kui kasutusel on --edit"
 
 #: virtinst/virtxml.py:107
 msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr ""
+"„--osinfo“ või „--os-variant“ pole toetatud, kui kasutusel on „--remove-"
+"device“"
 
 #: virtinst/virtxml.py:109
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr ""
+msgstr "--osinfo/--os-variant pole toetatud, kui kasutusel on --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr ""
+msgstr "--build-xml pole toetatud, kui kasutusel on {cli_flag}"
 
 #: virtinst/virtxml.py:122
 #, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr ""
+msgstr "--remove-device pole toetatud, kui kasutusel on {cli_flag}"
 
 #: virtinst/virtxml.py:128
 #, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr ""
+msgstr "--add-device pole toetatud, kui kasutusel on {cli_flag}"
 
 #: virtinst/virtxml.py:135
 #, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr ""
+msgstr "Ma ei tea, mida teha „--update“ võtmega, kui kasutusel on „{cli_flag}“"
 
 #: virtinst/virtxml.py:151
 #, python-format
 msgid "One of %s must be specified."
-msgstr ""
+msgstr "Üks neist peab olema määratletud: %s."
 
 #: virtinst/virtxml.py:153
 #, python-format
@@ -6659,17 +6762,17 @@ msgstr "Ühtegi muudatust pole määratletud."
 #: virtinst/virtxml.py:170
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
-msgstr ""
+msgstr "Võid määratleda vaid ühe muutmise (vastuolus tingimused: %s)"
 
 #: virtinst/virtxml.py:212
 #, python-format
 msgid "Invalid --edit option '%s'"
-msgstr ""
+msgstr "„--edit“ võtme vigane valik „%s“"
 
 #: virtinst/virtxml.py:216
 #, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr ""
+msgstr "XML-is ei leidu „{cli_flag}“ objekte"
 
 #: virtinst/virtxml.py:223
 #, python-brace-format
@@ -6680,43 +6783,49 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
+"Määrasid tingimuseks „--edit {number}“, aga XML-is on vaid {maxnum} „"
+"{cli_flag}“ objekt"
 msgstr[1] ""
+"Määrasid tingimuseks „--edit {number}“, aga XML-is on vaid {maxnum} „"
+"{cli_flag}“ objekti"
 
 #: virtinst/virtxml.py:244
 #, python-format
 msgid "No matching objects found for %s"
-msgstr ""
+msgstr "„%s“ jaoks ei leidu sobivaid objekte"
 
 #: virtinst/virtxml.py:261
 #, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
+"„--edit {option}“ tingimusel puudub mõte, kui kasutusel on „{cli_flag}“, "
+"pigem kasuta tühja „--edit“ võtit"
 
 #: virtinst/virtxml.py:334
 #, python-format
 msgid "Define '%s' with the changed XML?"
-msgstr ""
+msgstr "Kas määratled muutunud XML-iga „%s“?"
 
 #: virtinst/virtxml.py:342
 #, python-format
 msgid "Domain '%s' defined successfully."
-msgstr ""
+msgstr "„%s“ domeeni määratlemine õnnestus."
 
 #: virtinst/virtxml.py:348
 #, python-format
 msgid "Start '%s' with the changed XML?"
-msgstr ""
+msgstr "Kas käivitad „%s“ muutunud XML-i alusel?"
 
 #: virtinst/virtxml.py:359 virtinst/virtxml.py:671
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
-msgstr ""
+msgstr "„%(domain)s“ domeeni käivitamine ei õnnestunud: %(error)s"
 
 #: virtinst/virtxml.py:366 virtinst/virtxml.py:677
 #, python-format
 msgid "Domain '%s' started successfully."
-msgstr ""
+msgstr "„%s“ domeeni käivitamine õnnestus."
 
 #: virtinst/virtxml.py:372
 #, python-format
@@ -6725,6 +6834,9 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Kas ühendad selle seadme töötava külalissüsteemiga „%(domain)s“?"
 
 #: virtinst/virtxml.py:373
 msgid "Device hotplug successful."
@@ -6733,7 +6845,7 @@ msgstr "Seadme ühendamine töötava süsteemiga õnnestus."
 #: virtinst/virtxml.py:374
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr ""
+msgstr "Seadme ühendamisel töötava süsteemiga tekkis viga: %(error)s"
 
 #: virtinst/virtxml.py:376
 #, python-format
@@ -6742,6 +6854,9 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Kas ühendad selle seadme lahti töötavast külalissüsteemist „%(domain)s“?"
 
 #: virtinst/virtxml.py:377
 msgid "Device hotunplug successful."
@@ -6750,7 +6865,7 @@ msgstr "Seadme lahtiühendamine töötavast süsteemist õnnestus."
 #: virtinst/virtxml.py:378
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr ""
+msgstr "Seadme lahtiühendamisel töötavast süsteemist tekkis viga: %(error)s"
 
 #: virtinst/virtxml.py:380
 #, python-format
@@ -6759,6 +6874,9 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Kas uuendad selle seadme külalissüsteemi „%(domain)s“ domeeni jaoks?"
 
 #: virtinst/virtxml.py:381
 msgid "Device update successful."
@@ -6767,7 +6885,7 @@ msgstr "Seadme uuendamine õnnestus."
 #: virtinst/virtxml.py:382
 #, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr ""
+msgstr "Viga seadme uuendamise katsel: %(error)s"
 
 #: virtinst/virtxml.py:433
 msgid "No XML diff was generated. The requested changes will have no effect."
@@ -6775,7 +6893,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:452
 msgid "Edit libvirt XML using command line options."
-msgstr ""
+msgstr "Muuda libvirt XML-i käsurealt."
 
 #: virtinst/virtxml.py:458
 msgid "Domain name, id, or uuid"
@@ -6852,15 +6970,15 @@ msgstr "Käivita domeen."
 
 #: virtinst/virtxml.py:522
 msgid "Only print the requested change, in diff format"
-msgstr ""
+msgstr "Ainult väljasta soovitud muudatus „diff“ vormingus"
 
 #: virtinst/virtxml.py:527
 msgid "Only print the requested change, in full XML format"
-msgstr ""
+msgstr "Ainult väljasta soovitud muudatus täismahulises XML-vormingus"
 
 #: virtinst/virtxml.py:530
 msgid "Require confirmation before saving any results."
-msgstr ""
+msgstr "Ükspuha missuguste tulemuste salvestamisel küsi kinnitust."
 
 #: virtinst/virtxml.py:535
 msgid "Conversion options"
@@ -6890,15 +7008,15 @@ msgstr ""
 
 #: virtinst/virtxml.py:602
 msgid "A domain must be specified"
-msgstr ""
+msgstr "Domeen peab olema määratletud"
 
 #: virtinst/virtxml.py:647
 msgid "The VM is not running, --update is inapplicable."
-msgstr ""
+msgstr "Virtuaalmasin ei tööta ja seega „--update“ argument pole kasutatav."
 
 #: virtinst/virtxml.py:680
 msgid "Changes will take effect after the domain is fully powered off."
-msgstr ""
+msgstr "Muudatused jõustuvad, kui domeen on täies mahus seisatud."
 
 #: virtinst/virtxml.py:684
 msgid ""
@@ -6916,6 +7034,8 @@ msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
+"XML-failis polnud eeldatud juurelementi nimega „%(expectname)s“, küll aga "
+"leidus „%(foundname)s“"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:517
