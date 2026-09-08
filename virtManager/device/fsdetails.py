@@ -116,6 +116,7 @@ class vmmFSDetails(vmmGObjectUI):
         simple_store_set("fs-format-combo", ["raw", "qcow2"])
         self.widget("fs-readonly").set_visible(
             self.conn.is_qemu() or self.conn.is_test() or self.conn.is_lxc()
+            or self.conn.is_bhyve()
         )
 
     ##############

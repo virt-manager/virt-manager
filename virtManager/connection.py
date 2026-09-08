@@ -335,6 +335,7 @@ class vmmConnection(vmmGObject):
     is_qemu = property(lambda s: getattr(s, "_backend").is_qemu)
     is_qemu_privileged = property(lambda s: getattr(s, "_backend").is_qemu_privileged)
     is_qemu_unprivileged = property(lambda s: getattr(s, "_backend").is_qemu_unprivileged)
+    is_bhyve = property(lambda s: getattr(s, "_backend").is_bhyve)
     is_test = property(lambda s: getattr(s, "_backend").is_test)
     is_unprivileged = property(lambda s: getattr(s, "_backend").is_unprivileged)
 
