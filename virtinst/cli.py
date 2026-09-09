@@ -4579,6 +4579,7 @@ class ParserIommu(VirtCLIParser):
         cls.add_arg("driver.ril", "ril", is_onoff=True)
         cls.add_arg("driver.ssidsize", "ssidsize")
         cls.add_arg("driver.oas", "oas")
+        cls.add_arg("driver.cmdqv", "cmdqv", is_onoff=True)
 
 
 #######################
