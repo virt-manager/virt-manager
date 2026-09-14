@@ -1045,8 +1045,12 @@ class DeviceDisk(Device):
             # This likely isn't correct, but it's kind of a catch all
             # for virt types we don't know how to handle.
             return "ide"
-        if self.is_disk() and guest.supports_virtiodisk():
-            return "virtio"
+        if self.is_disk():
+            if guest.supports_virtiodisk():
+                return "virtio"
+            enum = guest.lookup_domcaps().devices.disk.get_enum("bus")
+            if guest.osinfo.supports_nvme() and enum.has_value("nvme"):
+                return "nvme"
         if guest.os.is_q35():
             return "sata"
         if self.conn.is_bhyve():
@@ -1074,6 +1078,8 @@ class DeviceDisk(Device):
             self.driver_type = self._get_default_driver_type()
         if not self.bus:
             self.bus = self._default_bus(guest)
+        if self.bus == "nvme":
+            self.serial = "0"
         if self.is_cdrom():
             self.read_only = True
 
