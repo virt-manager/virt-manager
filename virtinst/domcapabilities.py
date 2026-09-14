@@ -471,6 +471,12 @@ class DomainCapabilities(XMLBuilder):
 
         return self.devices.graphics.get_enum("type").has_value("spice")
 
+    def supports_graphics_dbus(self):
+        if not self.devices.graphics.supported:
+            return False
+
+        return self.devices.graphics.get_enum("type").has_value("dbus")
+
     def supports_channel_spicevmc(self):
         """
         Return False if libvirt explicitly advertises no support for

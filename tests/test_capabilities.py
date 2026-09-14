@@ -98,6 +98,7 @@ def testDomainCapabilitiesx86():
     assert "UEFI" in caps.label_for_firmware_path("OVMF")
 
     assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_graphics_dbus()
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
@@ -117,6 +118,7 @@ def testDomainCapabilitiesAArch64():
     assert "UEFI" in caps.label_for_firmware_path("aarch64/QEMU_EFI")
 
     assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_graphics_dbus()
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
@@ -136,6 +138,7 @@ def testDomainCapabilitiesPPC64le():
     assert "Default" in caps.label_for_firmware_path(None)
 
     assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_graphics_dbus()
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert not caps.supports_channel_spicevmc()
@@ -167,6 +170,7 @@ def testDomainCapabilitiesRISCV64():
     assert "UEFI" in caps.label_for_firmware_path("RISCV_VIRT_CODE.fd")
 
     assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_graphics_dbus()
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
@@ -198,7 +202,15 @@ def testDomainCapabilitiesLoongArch64():
     assert "UEFI" in caps.label_for_firmware_path("loongarch64/QEMU_CODE.fd")
 
     assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_graphics_dbus()
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
     assert caps.supported_panic_models() == ["pvpanic"]
+
+
+def testDomainCapabilitiesDBusUnsupported():
+    xml = open(DATADIR + "/kvm-x86_64-domcaps-insecure.xml").read()
+    caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
+
+    assert not caps.supports_graphics_dbus()

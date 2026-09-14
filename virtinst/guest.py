@@ -853,9 +853,14 @@ class Guest(XMLBuilder):
     def change_graphics(self, val, inst):
         inst.type = val
         if val == "spice":
+            self._remove_dbus_audio()
             self._add_spice_devices()
+        elif val == "dbus":
+            self._remove_spice_devices(inst)
+            self._ensure_dbus_audio()
         else:
             self._remove_spice_devices(inst)
+            self._remove_dbus_audio()
 
     def convert_to_q35(self, num_pcie_root_ports=None):
         self.os.machine = "q35"
@@ -1447,15 +1452,76 @@ class Guest(XMLBuilder):
         self._add_spice_sound()
         self._add_spice_usbredir()
 
+    def _has_dbus_graphics(self):
+        for gfx in self.devices.graphics:
+            if gfx.type == gfx.TYPE_DBUS:
+                return True
+        return False
+
+    def _next_audio_id(self):
+        ids = []
+        for audio in self.devices.audio:
+            try:
+                ids.append(int(audio.id))
+            except Exception:
+                pass
+        return str(max(ids or [0]) + 1)
+
+    def _ensure_dbus_audio(self):
+        if not self._has_dbus_graphics():
+            return
+        if not self.devices.sound:
+            return
+
+        dbus_audio = None
+        for audio in self.devices.audio:
+            if audio.type == "dbus":
+                dbus_audio = audio
+                break
+
+        if dbus_audio is None:
+            dbus_audio = DeviceAudio(self.conn)
+            dbus_audio.type = "dbus"
+            dbus_audio.id = self._next_audio_id()
+            self.add_device(dbus_audio)
+
+        for gfx in self.devices.graphics:
+            if gfx.type == gfx.TYPE_DBUS:
+                gfx.audio_id = dbus_audio.id
+
+        for sound in self.devices.sound:
+            if sound.audio_id is None:
+                sound.audio_id = dbus_audio.id
+
     def _remove_duplicate_console(self, dev):
         condup = DeviceConsole.get_console_duplicate(self, dev)
         if condup:
             log.debug("Found duplicate console device:\n%s", condup.get_xml())
             self.devices.remove_child(condup)
 
+    def _remove_dbus_audio(self):
+        if self._has_dbus_graphics():
+            return
+
+        for audio in list(self.devices.audio):
+            if audio.type == "dbus":
+                for sound in self.devices.sound:
+                    if sound.audio_id == audio.id:
+                        sound.audio_id = None
+                for gfx in self.devices.graphics:
+                    if gfx.audio_id == audio.id:
+                        gfx.audio_id = None
+                self.devices.remove_child(audio)
+
     def _remove_spice_audio(self):
-        for audio in self.devices.audio:
+        for audio in list(self.devices.audio):
             if audio.type == "spice":
+                for sound in self.devices.sound:
+                    if sound.audio_id == audio.id:
+                        sound.audio_id = None
+                for gfx in self.devices.graphics:
+                    if gfx.audio_id == audio.id:
+                        gfx.audio_id = None
                 self.devices.remove_child(audio)
 
     def _remove_spice_channels(self):

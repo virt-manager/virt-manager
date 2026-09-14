@@ -74,6 +74,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
             virtinst.DeviceGraphics.TYPE_RDP,
         ]:
             return str(gtype).upper()
+        if gtype == virtinst.DeviceGraphics.TYPE_DBUS:
+            return "D-Bus"
         return str(gtype).capitalize()
 
     ##########################
@@ -88,6 +90,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         graphics_model.clear()
         graphics_model.append(["spice", _("Spice server")])
         graphics_model.append(["vnc", _("VNC server")])
+        graphics_model.append(["dbus", _("D-Bus server")])
 
         graphics_listen_list = self.widget("graphics-listen-type")
         graphics_listen_model = Gtk.ListStore(str, str)
@@ -127,6 +130,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         is_vnc = gtype == "vnc"
         is_spice = gtype == "spice"
+        is_dbus = gtype == "dbus"
+        has_gl = is_spice or is_dbus
 
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
         has_listen_none = listen in ["none", "socket"]
@@ -135,8 +140,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
             [v for v in self.vm.xmlobj.devices.video if (v.model == "virtio" and v.accel3d)]
         )
 
-        uiutil.set_grid_row_visible(self.widget("graphics-warn-virtio"), not has_virtio_3d)
-        uiutil.set_grid_row_visible(self.widget("graphics-warn-listen"), not has_listen_none)
+        uiutil.set_grid_row_visible(
+            self.widget("graphics-warn-virtio"), has_gl and not has_virtio_3d
+        )
+        uiutil.set_grid_row_visible(
+            self.widget("graphics-warn-listen"), is_spice and not has_listen_none
+        )
 
         passwd_enabled = self.widget("graphics-password-chk").get_active()
         self.widget("graphics-password").set_sensitive(passwd_enabled)
@@ -146,7 +155,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password").set_visibility(passwd_visible)
 
         glval = self.widget("graphics-opengl").get_active()
-        uiutil.set_grid_row_visible(self.widget("graphics-opengl-subopts-box"), glval and is_spice)
+        uiutil.set_grid_row_visible(self.widget("graphics-opengl-subopts-box"), glval and has_gl)
 
         all_rows = [
             "graphics-listen-type",
@@ -163,16 +172,15 @@ class vmmGraphicsDetails(vmmGObjectUI):
         )
         self.widget("graphics-port").set_visible(not is_auto)
 
-        rows = ["graphics-password-box", "graphics-listen-type"]
-        if listen == "address":
+        rows = []
+        if is_vnc or is_spice:
+            rows.extend(["graphics-password-box", "graphics-listen-type"])
+        if (is_vnc or is_spice) and listen == "address":
             rows.extend(["graphics-port-box", "graphics-address"])
-        if is_spice:
+        if has_gl:
             rows.append("graphics-opengl")
             if glval:
                 rows.append("graphics-opengl-subopts-box")
-
-        if not is_vnc and not is_spice:
-            rows = []
 
         for row in all_rows:
             uiutil.set_grid_row_visible(self.widget(row), row in rows)
@@ -254,31 +262,37 @@ class vmmGraphicsDetails(vmmGObjectUI):
         if not self.widget("graphics-rendernode").is_visible():
             rendernode = None
 
-        passwd = self.widget("graphics-password").get_text()
-        if not self.widget("graphics-password-chk").get_active():
-            passwd = None
+        passwd = None
+        if self.widget("graphics-password-box").is_visible():
+            passwd = self.widget("graphics-password").get_text()
+            if not self.widget("graphics-password-chk").get_active():
+                passwd = None
 
-        portauto = self.widget("graphics-port-auto").get_active()
-        port = uiutil.spin_get_helper(self.widget("graphics-port"))
+        port = None
+        if self.widget("graphics-port-box").is_visible():
+            portauto = self.widget("graphics-port-auto").get_active()
+            port = uiutil.spin_get_helper(self.widget("graphics-port"))
 
-        if (
-            self.widget("graphics-port-auto").get_inconsistent()
-            and self.widget("graphics-port-auto").is_visible()
-        ):
-            # When switching from listen=None to listen=address with
-            # Hypervisor default, we need to force autoport otherwise
-            # the XML change doesn't stick
-            self._active_edits.append(_EDIT_GFX_PORT)
-            portauto = True
-        if portauto:
-            port = -1
+            if (
+                self.widget("graphics-port-auto").get_inconsistent()
+                and self.widget("graphics-port-auto").is_visible()
+            ):
+                # When switching from listen=None to listen=address with
+                # Hypervisor default, we need to force autoport otherwise
+                # the XML change doesn't stick
+                self._active_edits.append(_EDIT_GFX_PORT)
+                portauto = True
+            if portauto:
+                port = -1
 
-        listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
-        addr = uiutil.get_list_selection(self.widget("graphics-address"))
-        if listen and listen == "none":
-            port = None
-        elif listen:
-            listen = addr
+        listen = None
+        if self.widget("graphics-listen-type").is_visible():
+            listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
+            addr = uiutil.get_list_selection(self.widget("graphics-address"))
+            if listen and listen == "none":
+                port = None
+            elif listen:
+                listen = addr
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
 
