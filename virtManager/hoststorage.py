@@ -384,11 +384,15 @@ class vmmHostStorage(vmmGObjectUI):
 
     def _populate_vols(self):
         list_widget = self.widget("vol-list")
-        pool = self._current_pool()
-        vols = pool and pool.get_volumes() or []
         model = list_widget.get_model()
         list_widget.get_selection().unselect_all()
         model.clear()
+
+        pool = self._current_pool()
+        if pool is None:
+            return  # pragma: no cover
+
+        vols = pool.get_volumes()
 
         vadj = self.widget("vol-scroll").get_vadjustment()
         vscroll_percent = vadj.get_value() // max(vadj.get_upper(), 1)
