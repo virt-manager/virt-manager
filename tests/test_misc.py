@@ -157,6 +157,65 @@ def test_misc_cpu_cornercases():
     assert guest.cpu.model is None
 
 
+def test_misc_cloudinit_create_files():
+    """
+    Coverage for CloudInitData.create_files() and the empty-vs-None
+    distinction that keeps the meta-data file on the cidata ISO when the
+    user only passes --cloud-init user-data=... without meta-data=.
+    """
+    import tempfile
+    from virtinst.install.cloudinit import CloudInitData
+
+    clouddir = os.path.join(utils.DATADIR, "cli", "cloudinit")
+    userdata_path = os.path.join(clouddir, "user-data.txt")
+    metadata_path = os.path.join(clouddir, "meta-data.txt")
+    network_path = os.path.join(clouddir, "network-config.txt")
+
+    with open(userdata_path) as f:
+        userdata_content = f.read()
+    with open(metadata_path) as f:
+        metadata_content = f.read()
+    with open(network_path) as f:
+        network_content = f.read()
+
+    def _pairs_and_contents(data):
+        with tempfile.TemporaryDirectory() as scratchdir:
+            pairs = data.create_files(scratchdir)
+            contents = {dst: open(src).read() for src, dst in pairs}
+            return [dst for _, dst in pairs], contents
+
+    # Only user-data provided: meta-data must still be present (empty) so the
+    # NoCloud datasource accepts the seed, and network-config must be absent.
+    data = CloudInitData()
+    data.user_data = userdata_path
+    dests, contents = _pairs_and_contents(data)
+    assert "user-data" in dests
+    assert "meta-data" in dests
+    assert "network-config" not in dests
+    assert contents["user-data"] == userdata_content
+    assert contents["meta-data"] == ""
+
+    # Bare --cloud-init: both user-data and meta-data are generated/empty.
+    data = CloudInitData()
+    dests, _ = _pairs_and_contents(data)
+    assert "user-data" in dests
+    assert "meta-data" in dests
+    assert "network-config" not in dests
+
+    # All three explicitly provided.
+    data = CloudInitData()
+    data.user_data = userdata_path
+    data.meta_data = metadata_path
+    data.network_config = network_path
+    dests, contents = _pairs_and_contents(data)
+    assert "user-data" in dests
+    assert "meta-data" in dests
+    assert "network-config" in dests
+    assert contents["user-data"] == userdata_content
+    assert contents["meta-data"] == metadata_content
+    assert contents["network-config"] == network_content
+
+
 def test_misc_meter():
     """
     Test coverage of our urlgrabber meter copy

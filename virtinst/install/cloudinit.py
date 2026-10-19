@@ -47,7 +47,7 @@ class _CloudInitConfig:
         else:
             content = self._content()
 
-        if not content:
+        if content is None:
             return
 
         file = self._create_file(content)
