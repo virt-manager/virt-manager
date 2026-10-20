@@ -449,6 +449,47 @@ class _DiskData:
         self.is_media = is_media
 
 
+def _build_diskdatas_for_snapshots(vm, existing):
+    """
+    Return a list of _DiskData for files created by external snapshots
+    that are not already in the passed list
+    """
+    seen = set(d.path for d in existing if d.path)
+    ret = []
+
+    try:
+        snapshots = vm.list_snapshots()
+    except Exception:  # pragma: no cover
+        log.debug("Error listing snapshots for VM '%s'", vm.get_name(), exc_info=True)
+        return ret
+
+    for snap in snapshots:
+        if not snap.is_external():
+            continue
+        xmlobj = snap.get_xmlobj()
+        # The snapshot's own disk sources are the overlays, but the files
+        # the domain used before the snapshot are only in the saved domain XML
+        candidates = [
+            ("%s (%s)" % (disk.target, snap.get_name()), disk.get_source_path())
+            for disk in xmlobj.domain_disks
+        ]
+        candidates += [
+            ("%s (%s)" % (disk.name, snap.get_name()), disk.source.file)
+            for disk in xmlobj.disks
+            if disk.snapshot == "external"
+        ]
+        if xmlobj.memory_type == "external":
+            candidates.append(("memory (%s)" % snap.get_name(), xmlobj.memory_file))
+
+        for label, path in candidates:
+            if not path or path in seen:
+                continue
+            seen.add(path)
+            ret.append(_DiskData(label, path, False, False, False))
+
+    return ret
+
+
 def _build_diskdata_for_vm(vm):
     """
     Return a list of _DiskData for all VM resources the app attempts to delete
@@ -456,6 +497,8 @@ def _build_diskdata_for_vm(vm):
     diskdatas = []
     for disk in vm.xmlobj.devices.disk:
         diskdatas.append(_DiskData.from_disk(disk))
+
+    diskdatas.extend(_build_diskdatas_for_snapshots(vm, diskdatas))
 
     diskdatas.append(_DiskData("kernel", vm.get_xmlobj().os.kernel, True, False, True))
     diskdatas.append(_DiskData("initrd", vm.get_xmlobj().os.initrd, True, False, True))

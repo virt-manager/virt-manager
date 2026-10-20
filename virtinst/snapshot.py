@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from .devices.disk import _DiskSource
+from .devices.disk import DeviceDisk, _DiskSource
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -29,3 +29,6 @@ class DomainSnapshot(XMLBuilder):
     memory_file = XMLProperty("./memory/@file")
 
     disks = XMLChildProperty(_SnapshotDisk, relative_xpath="./disks")
+
+    # Disks of the domain config as it was when the snapshot was taken
+    domain_disks = XMLChildProperty(DeviceDisk, relative_xpath="./domain/devices")
