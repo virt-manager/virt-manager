@@ -29,3 +29,11 @@ class DomainSnapshot(XMLBuilder):
     memory_file = XMLProperty("./memory/@file")
 
     disks = XMLChildProperty(_SnapshotDisk, relative_xpath="./disks")
+
+    @staticmethod
+    def validate_generic_name(name_label, val):
+        XMLBuilder.validate_generic_name(name_label, val)
+        if val and val.isdigit():
+            raise ValueError(_("%(objecttype)s name cannot consist only of digits.") %
+                             {"objecttype": name_label}
+            )
