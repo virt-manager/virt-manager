@@ -1028,6 +1028,10 @@ def testXMLBuilderCoverage():
 
     assert virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar") is None
 
+    with pytest.raises(ValueError):
+        virtinst.DomainSnapshot.validate_generic_name("Snapshot", "123")
+    assert virtinst.DomainSnapshot.validate_generic_name("Snapshot", "snap123") is None
+
     # Test property __repr__ for code coverage
     assert "DeviceAddress" in str(virtinst.DeviceDisk.address)
     assert "./driver/@cache" in str(virtinst.DeviceDisk.driver_cache)
