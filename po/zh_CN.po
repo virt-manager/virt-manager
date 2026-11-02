@@ -23,7 +23,7 @@
 # Pavel Hrdina <phrdina@redhat.com>, 2020, 2022.
 # Whired Planck <fungdaat31@outlook.com>, 2020, 2021, 2022.
 # Xi Lu <lx@shellcodes.org>, 2023.
-# Luke Na <narukeu@outlook.com>, 2023.
+# Luke Na <narukeu@outlook.com>, 2023, 2026.
 # zk dc <zkdc2345@qq.com>, 2023.
 # 连 浩鑫 <lianhaoxin2012@outlook.com>, 2023.
 # eirik song <eirik.song@gmail.com>, 2024.
@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2026-03-15 00:58+0000\n"
-"Last-Translator: Shunyao Liu <liushunyao31@outlook.com>\n"
+"PO-Revision-Date: 2026-05-02 22:59+0000\n"
+"Last-Translator: Luke Na <narukeu@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -120,6 +120,7 @@ msgstr "由 libvirt 强力驱动"
 #: ui/about.ui:18
 msgid "translator-credits"
 msgstr ""
+"Luke Na <narukeu@outlook.com>, 2026\n"
 "Whired Planck <fungdaat31@outlook.com>, 2020\n"
 "Martin Liu <martin@aws-faq.com>, 2015\n"
 "Cole Robinson <crobinso@redhat.com>, 2015\n"
@@ -370,9 +371,9 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。如果需要做一些配"
-"置\n"
-"比如修改密码或设置静态 IP 地址，请查看 virt-sysprep(1) 工具。</span>"
+"<span size='small'>克隆 <u>不会</u> 修改客户机操作系统内容。如果您需要执行更"
+"改密码或\n"
+"静态 IP 地址等操作，请参阅 virt-sysprep(1) 工具。</span>"
 
 #: ui/clone.ui:706
 msgid "C_lone"
@@ -1002,7 +1003,7 @@ msgstr "2"
 
 #: ui/details.ui:1370
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr "<small>过度使用 vCPUs 会影响性能</small>"
+msgstr "<small>过度使用 vCPU 会影响性能</small>"
 
 #: ui/details.ui:1406
 msgid "<b>CPUs</b>"
@@ -2773,7 +2774,7 @@ msgstr "NAT"
 
 #: virtManager/createnet.py:109
 msgid "Open"
-msgstr "开路"
+msgstr "开放"
 
 #: virtManager/createnet.py:110
 msgid "Isolated"
@@ -2985,7 +2986,7 @@ msgstr "正在删除磁盘镜像"
 
 #: virtManager/createvm.py:1087
 msgid "Removing disk images we created for this virtual machine."
-msgstr "正在删除磁盘镜像，由程序为该虚拟机创建镜像。"
+msgstr "正在删除我们为此虚拟机创建的磁盘镜像。"
 
 #: virtManager/createvm.py:1285
 #, python-format
@@ -3176,7 +3177,7 @@ msgstr "另外，删除某些存储设备时出错：\n"
 
 #: virtManager/delete.py:218
 msgid "Errors encountered while removing certain storage devices."
-msgstr "删除默写存储设备时出错。"
+msgstr "删除某些存储设备时出错。"
 
 #: virtManager/delete.py:228
 #, python-format
@@ -3258,7 +3259,7 @@ msgstr "无法删除 SCSI 设备。"
 
 #: virtManager/delete.py:594
 msgid "Cannot delete unmanaged remote storage."
-msgstr "无法删除自由远程存储。"
+msgstr "无法删除非托管远程存储。"
 
 #: virtManager/delete.py:596
 msgid "Path does not exist."
@@ -3270,7 +3271,7 @@ msgstr "没有到父目录的写入访问。"
 
 #: virtManager/delete.py:600
 msgid "Cannot delete unmanaged block device."
-msgstr "无法删除自由块设备。"
+msgstr "无法删除非托管块设备。"
 
 #: virtManager/delete.py:611
 msgid "Storage is read-only."
@@ -3337,7 +3338,7 @@ msgstr "virt-manager 不支持多个图形控制台"
 
 #: virtManager/details/console.py:263
 msgid "Graphical console not configured for guest"
-msgstr "没有为虚拟机系统配置图形控制台"
+msgstr "没有为客户机配置图形控制台"
 
 #: virtManager/details/console.py:540
 msgid "Guest has crashed."
@@ -3349,7 +3350,7 @@ msgstr "客户机未运行。"
 
 #: virtManager/details/console.py:651
 msgid "Connecting to graphical console for guest"
-msgstr "为虚拟机系统连接到图形控制台"
+msgstr "连接客户机的图形控制台"
 
 #: virtManager/details/console.py:671
 #, python-format
@@ -4329,9 +4330,9 @@ msgid ""
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
-"确认以下内容：\n"
-"已载入 -A Xen 主机内核\n"
-"已启动 Xen 服务"
+"确认以下内容\n"
+" - 已引导 Xen 主机内核\n"
+" - 已启动 Xen 服务"
 
 #: virtManager/lib/connectauth.py:182
 msgid ""
@@ -4339,8 +4340,8 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
-"无法检测本地会话：如果正在通过 ssh-X 或 VNC 运行虚拟系统管理器（virt-"
-"manager），可能无法以常规用户身份连接 libvirt，。请尝试以 root 用户身份运行。"
+"无法检测本地会话：如果正在通过 ssh- X 或 VNC 运行虚拟系统管理器（virt-manager"
+"），可能无法以常规用户身份连接 libvirt。请尝试以 root 用户身份运行。"
 
 #: virtManager/lib/connectauth.py:189
 msgid "Verify that an appropriate libvirt daemon is running."
@@ -4710,7 +4711,7 @@ msgstr "网络导出的目录"
 
 #: virtManager/object/storagepool.py:28
 msgid "LVM Volume Group"
-msgstr "L虚拟系统 卷组"
+msgstr "LVM 卷组"
 
 #: virtManager/object/storagepool.py:29
 msgid "Physical Disk Device"
@@ -4924,7 +4925,7 @@ msgstr "确定要强制关闭 '%s' 吗？"
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
-msgstr "这将立即关闭 虚拟系统 而不关闭操作系统，并可能造成数据丢失。"
+msgstr "这将立即关闭虚拟机电源而非通过关闭操作系统（来关机），并可能导致数据丢失。"
 
 #: virtManager/vmmenu.py:203 virtManager/vmmenu.py:272
 msgid "Error shutting down domain"
@@ -4998,7 +4999,7 @@ msgstr "确定要强制重置 '%s' 吗？"
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
-msgstr "这将立即重置虚拟系统而无需关闭操作系统，并可能造成数据丢失。"
+msgstr "这将立即重置虚拟机而非通过关闭操作系统（来重启），并可能导致数据丢失。"
 
 #: virtManager/vmmenu.py:300
 msgid "Error resetting domain"
@@ -5219,7 +5220,7 @@ msgstr "抑制非错误输出"
 
 #: virtinst/cli.py:699
 msgid "Print debugging information"
-msgstr "输入故障排除信息"
+msgstr "输出调试信息"
 
 #: virtinst/cli.py:708
 msgid ""
@@ -5838,7 +5839,7 @@ msgstr "要求的 %(mem1)s M > 可用的 %(mem2)s M"
 #: virtinst/diskbackend.py:576
 #, python-format
 msgid "size is required for non-existent disk '%s'"
-msgstr "non-existent 磁盘 '%s' 需要大小"
+msgstr "不存在的磁盘 '%s' 需要指定大小"
 
 #: virtinst/diskbackend.py:585
 #, python-format
@@ -5862,15 +5863,15 @@ msgstr ""
 
 #: virtinst/domain/launch_security.py:33
 msgid "SEV launch security requires a Q35 UEFI machine"
-msgstr "SEV 启动安全性设置需要计算机支持 Q35 UEFI"
+msgstr "SEV 启动安全需要 Q35 UEFI 机型"
 
 #: virtinst/domain/launch_security.py:47
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "SEV-SNP 启动安全性设置需要计算机支持 Q35 UEFI"
+msgstr "SEV-SNP 启动安全需要 Q35 UEFI 机型"
 
 #: virtinst/domain/launch_security.py:51
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "TDX启动安全性设置需要计算机支持 Q35 UEFI"
+msgstr "TDX 启动安全需要 Q35 UEFI 机型"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
