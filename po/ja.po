@@ -24,13 +24,14 @@
 # Yasuhiko Kamata <belphegor@belbel.or.jp>, 2021, 2022, 2025.
 # R Toda <toda.ryunosuke@gmail.com>, 2022.
 # Pavel Hrdina <phrdina@redhat.com>, 2025.
+# Ryo Nakano <ryonakaknock3@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-08-06 14:25+0000\n"
-"Last-Translator: Yasuhiko Kamata <belphegor@belbel.or.jp>\n"
+"PO-Revision-Date: 2026-11-02 09:13+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/virt-"
 "manager/virt-manager/ja/>\n"
 "Language: ja\n"
@@ -38,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -100,10 +101,8 @@ msgid "Manage virtual machines"
 msgstr "仮想マシンの管理"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualization;仮想化;libvirt;vm;vmm;"
+msgstr "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;仮想化;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -119,12 +118,13 @@ msgstr "Powered by libvirt"
 #: ui/about.ui:18
 msgid "translator-credits"
 msgstr ""
-"Noriko Mizumoto， <noriko@redhat.com>, 2006, 2007, 2015.\n"
-"kiyoto james hashida,  <khashida@redhat.com>, 2007.2008.\n"
-"Hyu_gabaru Ryu_ichi,  <hyu_gabaru@yahoo.co.jp>, 2007.\n"
-"Kiyoto Hashida,  <khashida@redhat.com>, 2008, 2009, 2010.\n"
-"Hajime Taira,  <htaira@redhat.com>, 2010.\n"
-"Shushi Kurose,  <md81bird@hitaki.net>, 2010."
+"Noriko Mizumoto <noriko@redhat.com>, 2006, 2007, 2015.\n"
+"kiyoto james hashida <khashida@redhat.com>, 2007.2008.\n"
+"Hyu_gabaru Ryu_ichi <hyu_gabaru@yahoo.co.jp>, 2007.\n"
+"Kiyoto Hashida <khashida@redhat.com>, 2008, 2009, 2010.\n"
+"Hajime Taira <htaira@redhat.com>, 2010.\n"
+"Shushi Kurose <md81bird@hitaki.net>, 2010.\n"
+"Ryo Nakano <ryonakaknock3@gmail.com>, 2026."
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
@@ -170,10 +170,8 @@ msgid "Host _Device:"
 msgstr "ホストデバイス(_D):"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "プールの開始"
+msgstr "起動ポリシー:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -1964,7 +1962,7 @@ msgstr "未適用の変更点(_U):"
 
 #: ui/preferences.ui:944
 msgid "_Deleting storage:"
-msgstr "ストレージを削除中(_D):"
+msgstr "ストレージの削除時(_D):"
 
 #: ui/preferences.ui:973
 msgid "<b>Confirmations</b>"
@@ -4928,6 +4926,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator がインストールされていないか利用できない状態です。なお、Wayland "
+"ではシステムトレイアイコンは利用できません"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5977,10 +5977,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP 実行時セキュリティには Q35 UEFI マシンが必要です"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV 実行時セキュリティには Q35 UEFI マシンが必要です"
+msgstr "TDX 実行時セキュリティには Q35 UEFI マシンが必要です"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
