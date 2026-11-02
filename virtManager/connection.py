@@ -1439,3 +1439,9 @@ class vmmConnection(vmmGObject):
     def get_details_window_size(self):
         ret = self.config.get_perconn(self.get_uri(), "/window-size")
         return ret
+
+    def get_collapsed_groups(self):
+        return self.config.get_perconn(self.get_uri(), "/collapsed-groups")
+
+    def set_collapsed_groups(self, names):
+        self.config.set_perconn(self.get_uri(), "/collapsed-groups", sorted(names))
