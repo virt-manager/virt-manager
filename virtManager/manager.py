@@ -147,6 +147,8 @@ class vmmManager(vmmGObjectUI):
 
         self.update_current_selection()
         self.widget("vm-list").get_selection().connect("changed", self.update_current_selection)
+        self.widget("vm-list").connect("row-expanded", self._vmlist_row_expanded_cb)
+        self.widget("vm-list").connect("row-collapsed", self._vmlist_row_collapsed_cb)
 
         self.max_disk_rate = 10.0
         self.max_net_rate = 10.0
@@ -641,7 +643,6 @@ class vmmManager(vmmGObjectUI):
         group_name = vm.get_vm_group()
         if group_name:
             parent_row = self._get_or_create_group_row(conn_row, group_name)
-            self.widget("vm-list").expand_row(parent_row.path, False)
         else:
             parent_row = conn_row
 
@@ -655,6 +656,8 @@ class vmmManager(vmmGObjectUI):
 
         # Expand a connection when adding a vm to it
         self.widget("vm-list").expand_row(conn_row.path, False)
+        if group_name:
+            self._restore_group_expansion(conn, parent_row)
 
     def vm_removed(self, conn, vm):
         row = self.get_row(vm)
@@ -835,22 +838,29 @@ class vmmManager(vmmGObjectUI):
                 self._refresh_group_row(conn, old_group)
             else:
                 self.model.remove(old_parent_iter)
+                self._set_group_collapsed(conn, old_group, False)
 
         vm.set_vm_group(new_group)
 
         vm_row = self._build_row(None, vm)
+        group_row = None
         if new_group:
+            if self._get_group_row(conn_row, new_group) is None:
+                self._set_group_collapsed(conn, new_group, False)
             group_row = self._get_or_create_group_row(conn_row, new_group)
             parent_iter = group_row.iter
-            self.widget("vm-list").expand_row(group_row.path, False)
             self._refresh_group_row(conn, new_group)
         else:
             parent_iter = conn_row.iter
 
         new_iter = self.model.append(parent_iter, vm_row)
 
-        sel = self.widget("vm-list").get_selection()
-        sel.select_iter(new_iter)
+        vmlist = self.widget("vm-list")
+        if group_row is not None:
+            self._restore_group_expansion(conn, group_row)
+            if not vmlist.row_expanded(group_row.path):
+                new_iter = group_row.iter
+        vmlist.get_selection().select_iter(new_iter)
 
     def _rebuild_group_submenu(self, vm):
         submenu = _GroupSubmenu()
@@ -902,11 +912,46 @@ class vmmManager(vmmGObjectUI):
         new_name = self._prompt_text(_("Rename Group"), _("Group name:"), initial=old_name)
         if not new_name or new_name == old_name:
             return
+        was_collapsed = old_name in conn.get_collapsed_groups()
         for vm in self._group_members(conn, old_name):
             self._move_vm_to_group(vm, new_name)
+        if was_collapsed:
+            group_row = self._get_group_row(self.get_row(conn), new_name)
+            self.widget("vm-list").collapse_row(group_row.path)
 
     def ungroup_group(self, _src=None):
         self._ungroup(*self._popup_group_ctx)
+
+    def _set_group_collapsed(self, conn, name, collapsed):
+        names = set(conn.get_collapsed_groups())
+        if collapsed == (name in names):
+            return
+        if collapsed:
+            names.add(name)
+        else:
+            names.discard(name)
+        conn.set_collapsed_groups(names)
+
+    def _restore_group_expansion(self, conn, group_row):
+        if group_row[ROW_GROUP_NAME] not in conn.get_collapsed_groups():
+            self.widget("vm-list").expand_row(group_row.path, False)
+
+    def _vmlist_row_expanded_cb(self, _src, treeiter, _path):
+        row = self.model[treeiter]
+        if row[ROW_IS_GROUP]:
+            self._set_group_collapsed(row[ROW_HANDLE], row[ROW_GROUP_NAME], False)
+            return
+
+        child = self.model.iter_children(treeiter)
+        while child is not None:
+            if self.model[child][ROW_IS_GROUP]:
+                self._restore_group_expansion(row[ROW_HANDLE], self.model[child])
+            child = self.model.iter_next(child)
+
+    def _vmlist_row_collapsed_cb(self, _src, treeiter, _path):
+        row = self.model[treeiter]
+        if row[ROW_IS_GROUP]:
+            self._set_group_collapsed(row[ROW_HANDLE], row[ROW_GROUP_NAME], True)
 
     #############################
     # State/UI updating methods #
