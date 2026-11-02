@@ -20,13 +20,14 @@
 # Kisaragi Hiu <mail@kisaragi-hiu.com>, 2022.
 # zhanchun li <lzc777@126.com>, 2024.
 # hsu zangmen <chzang55@gmail.com>, 2025.
+# Skyter Lin <linskyter@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2026-03-24 02:58+0000\n"
-"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"PO-Revision-Date: 2026-09-29 20:18+0000\n"
+"Last-Translator: Skyter Lin <linskyter@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -34,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -3762,7 +3763,7 @@ msgstr "正在建立虛擬機快照"
 msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
-msgstr ""
+msgstr "不建議對同一 VM 混合使用外部快照和內部快照。您確定要繼續嗎？"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4049,10 +4050,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap 裝置…"
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap 裝置…"
+msgstr "vDPA 裝置…"
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -4848,7 +4847,7 @@ msgstr "顯示虛擬系統管理器"
 msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
-msgstr ""
+msgstr "AppIndicator 未安裝或無法使用，Wayland 上系統匣圖示不可用"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5440,6 +5439,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"配置一個 NVRAM 儲存裝置。 \n"
+"它用於記錄guest kernel的 OOP/Panic 日誌。例如： \n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5624,10 +5626,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Error: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr "請求了圖形顯示，但未設定 DISPLAY。不能執行 virt-viewer。"
+msgstr "找不到任何 display。不能執行 virt-viewer。"
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5862,10 +5862,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP 的啟動安全性需要 Q35 UEFI 機器"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV 啟動安全性設定需要電腦支援 Q35 UEFI"
+msgstr "TDX 啟動安全性設定需要電腦支援 Q35 UEFI"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -6397,15 +6395,11 @@ msgid "Error validating install location: %s"
 msgstr "驗證安裝位置出錯：%s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo 需要作業系統名稱，但是沒有設定或檢測到\n"
+"--osinfo/--os-variant 需要作業系統名稱，但是沒有設定或檢測到\n"
 "任何值。"
 
 #: virtinst/virtinstall.py:600
@@ -6681,22 +6675,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "請鍵入 'yes' 或 'no'。"
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo 不支援和 --edit 一起使用"
+msgstr "--osinfo/--os-variant 不支援和 --edit 一起使用"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo 不支援和 --remove-device 一起使用"
+msgstr "--osinfo/--os-variant 不支援和 --remove-device 一起使用"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo 不支援和 --build-xml 一起使用"
+msgstr "--osinfo/--os-variant 不支援和 --build-xml 一起使用"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
