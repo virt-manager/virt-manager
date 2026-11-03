@@ -472,6 +472,15 @@ class vmmConfig:
     def set_console_resizeguest(self, pref):
         self.conf.set("/console/resize-guest", pref)
 
+    def get_console_grab_keyboard(self):
+        return bool(self.conf.get("/console/spice-grab-keyboard"))
+
+    def set_console_grab_keyboard(self, val):
+        self.conf.set("/console/spice-grab-keyboard", val)
+
+    def on_console_grab_keyboard_changed(self, cb):
+        return self.conf.notify_add("/console/spice-grab-keyboard", cb)
+
     def get_auto_usbredir(self):
         return bool(self.conf.get("/console/auto-redirect"))
 

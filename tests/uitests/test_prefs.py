@@ -53,6 +53,7 @@ def testPrefsAll(app):
     tab.combo_select("Resize guest", "On")
     tab.combo_select("Graphical console scaling", "Never")
     tab.find("Console autoconnect", "check box").click()
+    tab.find("Grab keyboard", "check box").click()
 
     tab.find("Change...", "push button").click()
     keyframe = app.find_window("Configure grab")

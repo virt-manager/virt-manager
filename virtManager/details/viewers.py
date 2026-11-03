@@ -82,6 +82,9 @@ class Viewer(vmmGObject):
         self._desktop_resolution = (0, 0)
 
         self.add_gsettings_handle(self.config.on_keys_combination_changed(self._refresh_grab_keys))
+        self.add_gsettings_handle(
+            self.config.on_console_grab_keyboard_changed(self._refresh_keyboard_grab)
+        )
 
     def _cleanup(self):
         self._close()
@@ -112,6 +115,7 @@ class Viewer(vmmGObject):
     def _set_display(self, display):
         self._display = display
         self._refresh_grab_keys()
+        self._refresh_keyboard_grab()
 
         self._display.connect("size-allocate", self._make_signal_proxy("size-allocate"))
 
@@ -183,6 +187,12 @@ class Viewer(vmmGObject):
         except Exception as e:  # pragma: no cover
             log.debug("Error when getting the grab keys combination: %s", str(e))
 
+    def _refresh_keyboard_grab(self):
+        if not self._display:
+            return  # pragma: no cover
+
+        self._set_keyboard_grab(self.config.get_console_grab_keyboard())
+
     def _emit_disconnected(self, errdetails=None):
         ssherr = self._tunnels.get_err_output()
         self.emit("disconnected", errdetails, ssherr)
@@ -223,6 +233,9 @@ class Viewer(vmmGObject):
         raise NotImplementedError()
 
     def _set_grab_keys(self, keys):
+        raise NotImplementedError()
+
+    def _set_keyboard_grab(self, val):
         raise NotImplementedError()
 
     def _open_host(self):
@@ -421,6 +434,11 @@ class VNCViewer(Viewer):
     def _set_grab_keys(self, keys):
         seq = GtkVnc.GrabSequence.new(keys)
         self._display.set_grab_keys(seq)
+
+    def _set_keyboard_grab(self, val):
+        # gtk-vnc doesn't grab the keyboard by default, only together
+        # with the pointer, so leave it alone
+        ignore = val
 
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys])
@@ -680,6 +698,9 @@ class SpiceViewer(Viewer):
     def _set_grab_keys(self, keys):
         seq = SpiceClientGtk.GrabSequence.new(keys)
         self._display.set_grab_keys(seq)
+
+    def _set_keyboard_grab(self, val):
+        self._display.set_property("grab-keyboard", val)
 
     def _send_keys(self, keys):
         return self._display.send_keys(
