@@ -223,6 +223,12 @@
       <description>Grab keyboard sequence for the graphical console</description>
     </key>
 
+    <key name="spice-grab-keyboard" type="b">
+      <default>true</default>
+      <summary>Grab the keyboard when the SPICE graphical console is focused</summary>
+      <description>Whether the SPICE graphical console grabs the keyboard when it is focused. Users may want to turn this off so host global shortcuts keep working while the console is focused. Key presses are still sent to the guest. VNC consoles are not affected.</description>
+    </key>
+
     <key name="auto-redirect" type="b">
       <default>true</default>
       <summary>Enable SPICE Auto USB redirection in console window</summary>

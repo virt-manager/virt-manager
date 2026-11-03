@@ -754,6 +754,34 @@ identical CPUs in order to migrate the VM.</property>
                         <property name="top-attach">4</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes">If disabled, the SPICE graphical console will not grab the keyboard, so host global shortcuts keep working while the console is focused. Key presses are still sent to the guest.</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Grab _keyboard:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">prefs-console-grab-keyboard</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="prefs-console-grab-keyboard">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="on_prefs_console_grab_keyboard_toggled" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">5</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
                 <child type="label">
