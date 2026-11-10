@@ -5316,6 +5316,7 @@ class ParserHostdev(VirtCLIParser):
         cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
         cls.add_arg("acpi.nodeset", "acpi_nodeset", can_comma=True)
         cls.add_arg("source.startupPolicy", "startup_policy")
+        cls.add_arg("driver.ats", "driver_ats", is_onoff=True)
 
 
 #############################
