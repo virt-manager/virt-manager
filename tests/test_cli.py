@@ -891,6 +891,15 @@ c.add_compare(
 
 c.add_compare(
     """
+--hostdev 0:15:0.4,driver.name=vfio,driver.ats=on
+--hostdev 0:15:0.5,driver.name=vfio,driver.ats=off
+    """,
+    "hostdev-ats",
+    prerun_check="12.10.0",
+)
+
+c.add_compare(
+    """
 --hostdev 0:15:0.4,acpi.nodeset=0,2
     """,
     "acpi-nodeset",
